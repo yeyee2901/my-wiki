@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="https://avatars.githubusercontent.com/u/55247343?v=4">
+        <!-- Enable syntax highlighting -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css" />
+        <link rel="Stylesheet" type="text/css" href="../../../style.css">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Ownership</title>
+    </head>
+    <body>
+
+      <!-- Header -->
+      <div class='bg-dark container-fluid pt-2 pb-2'>
+        <h1 class='text-white'>My Personal Wiki</h1>
+      </div>
+
+      <!-- Navbar -->
+      <div class='mt-0 mb-3 ml-0 mr-0 container-fluid bg-light'>
+        <nav class="navbar navbar-light bg-light">
+          <a class="navbar-brand" href="https://github.com/yeyee2901/" target="_blank">
+            <img src="http://pngimg.com/uploads/github/github_PNG40.png" 
+                width="30" 
+                height="30" 
+                class="d-inline-block align-top" 
+                alt=""
+            >
+            Github
+          </a>
+        </nav>
+      </div>
+
+
+
+      <div class='container'>
+        
+<div id="Basic"><h1 id="Basic" class="header"><a href="#Basic">Basic</a></h1></div>
+<p>
+Ownership_ adalah konsep di Rust untuk melakukan manajemen memory.
+Tujuan dari terciptanya konsep <em>ownership</em> adalah untuk mengurangi
+kompleksitas manajemen memori secara manual. And yes, Rust punya
+<code>garbage collector</code> (namun beberapa orang tidak menyebutnya demikian),
+namun walaupun dengan adanya <em>garbage collector</em>, manajemen memori Rust
+seperti <em>alloc</em> tetap dapat dilakukan secara manual, C-style, <span id="Basic-<em>BUT</em>"></span><strong id="<em>BUT</em>"><em>BUT</em></strong>, without
+calls to <code>free()</code> bullshits.
+</p>
+
+<p>
+Di Rust, konsep free-ing memory sudah di-handle secara otomatis, mainly
+menggunakan konsep <em>ownership</em> tersebut. Ada 3 main rule yang harus ditaati
+setiap saat agar dapat memahami konsep <em>ownership</em>:
+</p>
+
+<div id="Basic-Ownership Rules"><h3 id="Ownership Rules" class="header"><a href="#Basic-Ownership Rules" class="justcenter">Ownership Rules</a></h3></div>
+<ol>
+<li>
+Setiap <code>value</code> memiliki <code>variable</code> sebagai <code>owner</code>, namun setiap <code>owner</code>
+     tidak harus memiliki <code>value</code>
+
+<li>
+Setiap <code>value</code> hanya boleh terikat pada 1 <code>owner</code> pada saat yang sama.
+
+<li>
+Ketika <code>owner</code> <span id="Basic-Ownership Rules-keluar scope"></span><strong id="keluar scope">keluar scope</strong>, maka <code>value</code> akan di <em>drop</em> (free())
+
+</ol>
+
+<p>
+<span id="Basic-Ownership Rules-Korelasi Rule #1 &amp; #2"></span><strong id="Korelasi Rule #1 &amp; #2">Korelasi Rule #1 &amp; #2</strong>: Setiap value hanya boleh dimiliki oleh 1 owner,
+mengimplikasikan, bahwa untuk setiap <code>dynamic data</code> (yang di simpan di <em>heap</em>),
+ownership akan selalu berpindah ke variable baru saat terjadi re-assignment.
+Kejadian pemindahan ownership ini disebut <code>move</code> / <code>moving</code> (verb). Variable
+yang value-nya telah di <code>move</code>, akan menjadi tidak valid.
+</p>
+
+<pre rust>
+  let string1 = String::from("Hello");
+  let string2 = string1;        // &lt;- Value string1 di `move` kesini
+
+  // error karena `string1` sudah tidak punya isi
+  // karena value nya di `move` ke string2
+  println!("{} {}", string1, string2) 
+
+  // error juga karena value `string2` sudah dipindahkan
+  // ke dalam scope macro println sebelumnya
+  println!("{}", string2)
+</pre>
+    
+<div id="Borrowing &amp; Reference"><h1 id="Borrowing &amp; Reference" class="header"><a href="#Borrowing &amp; Reference">Borrowing &amp; Reference</a></h1></div>
+<p>
+Jika ingin memodifikasi / mengubah nilai / melakukan hal lain seperti print
+tanpa <code>mengambil ownership</code> dari suatu <em>value</em>, maka ada konsep <code>borrowing</code>.
+<code>Borrowing</code> dilakukan dengan cara menggunakan operator <code>&amp;</code> , atau 
+<code>reference operator</code>. Poin pentingnya adalah, "jika <code>owner</code> menjadi
+tidak valid, maka semua value yang di <code>borrow</code> akan menjadi
+tidak valid juga."
+Poin tersebutlah yang membuat Rust <code>Memory safe</code>.
+</p>
+<pre rust>
+  let string1 = String::from("Hello");
+  let string2 = &amp;string1;        // &lt;- Value string1 di `borrow`
+
+  // no error, karena string1 masih valid
+  // masih valid karena tidak ada pemindahan ownership
+  println!("{} {}", string1, string2) 
+</pre>
+
+<div id="Mutable Reference Rules"><h1 id="Mutable Reference Rules" class="header"><a href="#Mutable Reference Rules">Mutable Reference Rules</a></h1></div>
+<p>
+Jika ingin memodifikasi, maka peraturannya adalah:
+</p>
+<ol>
+<li>
+<span id="Mutable Reference Rules-OWNER dan REFERENCE harus sama2 bersifat explicitly mutable"></span><strong id="OWNER dan REFERENCE harus sama2 bersifat explicitly mutable">OWNER dan REFERENCE harus sama2 bersifat explicitly mutable</strong>.
+<pre rust>
+// immutable string
+let string1 = String::from("Hello");
+
+// *akan ada error:* 
+// "cannot borrow string1 as mutable because string1
+// is declared as immutable"
+let string2 = &amp;mut string1;       // &lt;- &amp;mut = mutable reference
+                                  // reference nya immutable, tapi value yang di borrow mutable
+
+
+// no error
+let mut string1 = String::("Hello2");
+let string2 = &amp;mut string1;
+</pre>
+
+<li>
+Peraturan selanjutnya, dalam satu scope, either:
+
+<ol>
+<li>
+Hanya boleh ada satu mutable reference yang menunjuk pada 1 objek yang sama,
+
+<li>
+Tidak boleh ada mutable reference &amp; immutable reference yang menunjuk ke objek
+     yang sama.
+<pre rust>
+  // example #1
+  {
+    let mut string1 = String::from("Hello");
+    let string2 = &amp;string1;     // okay
+    let string3 = &amp;string1;     // still okay, karena string2 &amp; string3 sama2 immutable ref
+
+    let string4 = &amp;mut string1; // NOT OKAY
+  }
+
+  // example #2
+  {
+    let mut string1 = String::from("Hello");
+    let string2 = &amp;mut string1;   // okay
+    let string3 = &amp;mut string1;   // NOT OKAY
+  }
+</pre>
+
+</ol>
+</ol>
+   
+
+<div id="Mutable Reference Rules-Penjelasan example #1"><h2 id="Penjelasan example #1" class="header"><a href="#Mutable Reference Rules-Penjelasan example #1">Penjelasan example #1</a></h2></div>
+<p>
+Mengapa dalam satu scope tidak boleh ada mutable &amp; immutable ref ke objek yang sama,
+adalah karena reference yang immutable, <code>does not expect the value to change</code>.
+Here's some analogy:
+</p>
+<ul>
+<li>
+ <span id="Mutable Reference Rules-Penjelasan example #1-string2"></span><strong id="string2">string2</strong>  : "alright, I'm immutable reference, and let me just hold on to 'Hello'"
+
+<li>
+ <span id="Mutable Reference Rules-Penjelasan example #1-string4"></span><strong id="string4">string4</strong>  : "Maybe I'll try to clean the string with <code>.clear()</code> to save memory"
+
+</ul>
+  
+<p>
+  some time later, still in the same scope...
+</p>
+<ul>
+<li>
+ <span id="Mutable Reference Rules-Penjelasan example #1-string2 &amp; string3"></span><strong id="string2 &amp; string3">string2 &amp; string3</strong>  : "Wha? I thought it was 'Hello', how come it's empty now?"
+
+</ul>
+  
+  
+<div id="Mutable Reference Rules-Penjelasan example #2"><h2 id="Penjelasan example #2" class="header"><a href="#Mutable Reference Rules-Penjelasan example #2">Penjelasan example #2</a></h2></div>
+<p>
+Dalam contoh ini, Rust menghindari <code>data race</code> dengan cara yang sangat efisien.
+Dalam kasus ini, lebih mudah menganalogikannya dalam berbagai contoh <code>async programming</code>.
+Misalnya pada kasus multi-threading,
+</p>
+
+<ul>
+<li>
+string2 memodifikasi memori string1 dari Thread A
+
+<li>
+string3 memodifikasi memori string1 juga, namun dari Thread B
+
+<li>
+At some point, Thread A &amp; B sama-sama mengakses memori string1 secara bersamaan
+
+</ul>
+
+<p>
+Guess what happen? Siapa yang mulai / selesai duluan tidak masalah,
+karena bila kita memodifikasi memori yang sedang dalam proses modifikasi jenis apapun,
+We'll most likely get <em>corrupted</em> / <em>junk data</em>.  Kasus inilah yang dinamakan <code>data race</code>.
+</p>
+
+<p>
+Kasus seperti ini, dalam pemrograman system lainnya (seperti C), dapat diatasi dengan
+<code>mutex lock (mutual exclusion)</code>, dimana sebuah <code>lock flag</code> dibuat sedemikian rupa, agar 
+"<span id="Mutable Reference Rules-Penjelasan example #2-hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama"></span><strong id="hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama">hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama</strong>".
+Ketika process A sedang mengakses 1 memori, maka access ke memori tersebut <span id="Mutable Reference Rules-Penjelasan example #2-dikunci"></span><strong id="dikunci">dikunci</strong>
+sampai process A selesai, sehingga process lain harus menunggu process A selesai
+baru bisa mengakses memori tersebut.
+</p>
+
+<p>
+Dalam Rust, behavior <code>mutex locking</code> untuk menghindari <code>data racing</code> tersebut
+dilakukan secara implisit melalui <a href="Ownership.html#Mutable Reference Rules">Mutable Reference Rule #2a</a>.
+</p>
+
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+      <!-- include highlight.js -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+      <script type="text/javascript">
+          document.querySelectorAll('pre').forEach(block => hljs.highlightBlock(block));
+      </script>
+    </body>
+</html>

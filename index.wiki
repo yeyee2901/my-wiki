@@ -1,4 +1,4 @@
-%title My Knowledge Personal Wiki
+%title My Personal Knowledge Wiki
 
 = KNOWLEDGE =
 == Tech ==

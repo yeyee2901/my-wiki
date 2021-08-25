@@ -1,11 +1,10 @@
 %title My Personal Knowledge Wiki
 
-= KNOWLEDGE =
 == Tech ==
-* [[KNOWLEDGE/Tech/dotfiles|How to create .dotfiles]]
+* [[KNOWLEDGE/Tech/dotfiles|How to create .dotfiles]] - for storing config files.
   * _Pre-requisites_:
     * git
 
-* [[KNOWLEDGE/Tech/Rust|Rust Things]]
+* [[KNOWLEDGE/Tech/Rust|Rust Programming Language]]
   * _installing_
   * _ownership concept_

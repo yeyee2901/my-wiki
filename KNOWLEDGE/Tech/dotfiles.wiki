@@ -1,0 +1,65 @@
+= Brief  =
+`dotfiles` adalah salah satu cara me-_manage_ setting-setting
+yang sering digunakan. Contohnya setting dari file 
+`.zshrc`, `.bashrc`, `~/.config/` . Semua dari file tersebut memiliki
+prefix '.' (dot), that's why it's refered to as '`dotfiles`'.
+
+Manajemen dotfiles dapat dilakukan dengan banyak cara, dan
+kenyamanan setiap orang berbeda-beda. Ada yang menggunakan [[https://www.gnu.org/software/stow/|GNU Stow]] 
+untuk manajemen `dotfiles` berbasis _sym-link_, ada juga yang lebih 
+nyaman menggunakan _git_. 
+
+Secara umum, lebih simple menggunakan _git_ (pre-requisites hanya install git),
+namun untuk struktur dotfiles yang lebih teratur, manajemen dotfiles menggunakan
+_GNU Stow_ lebih unggul.
+
+= Init Dotfiles =
+1) Starting from scratch, harus buat --bare repostiory dulu
+{{{bash
+git init --bare $HOME/.dotfiles
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+dotfiles config --local status.showUntrackedFiles no
+echo "alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" > alias.txt
+
+# or manually add in .bashrc (make sure this is also loaded by your shell)
+# alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+}}}
+2) Selanjutnya bisa interaksi dengan dotfiles seperti git repository biasanya.
+{{{bash
+dotfiles status
+dotfiles add .zshrc
+# dan seterusnya
+}}}
+
+
+
+= Sync Dotfiles with remote =
+1) Pastikan di remote, ada _alias_ nya seperti ini:
+{{{bash
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+}}}
+2) Buat `.gitignore` di `$HOME` (*PENTING*), isi dengan:
+{{{.gitignore
+.dotfiles
+}}} 
+    * Kalau tidak di ignore, nanti recursive
+3) _clone_ dari remote
+{{{bash
+git clone --bare [[https://github.com/yeyee2901/dotfiles|<repo>]] $HOME/.dotfiles
+}}}
+4) buat _alias_ sementara di shell session ini.
+{{{bash
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+}}}
+5) _sync_ dengan `checkout`
+{{{bash
+dotfiles checkout 
+}}}
+    * step diatas kemungkinan besar akan gagal (_uncommited files_)
+    * Bisa jadi karena sudah ada file `.zshrc`, `.gitignore`, etc.. 
+      di system, remove it.
+7) Set dotfiles agar tidak show  _untracked files_ (explicit config)
+{{{bash
+dotfiles config --local status.showUntrackedFiles no
+}}}    

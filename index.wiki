@@ -1,0 +1,11 @@
+%title My Knowledge Personal Wiki
+
+= KNOWLEDGE =
+== Tech ==
+* [[KNOWLEDGE/Tech/dotfiles|How to create .dotfiles]]
+  * _Pre-requisites_:
+    * git
+
+* [[KNOWLEDGE/Tech/Rust|Rust Things]]
+  * _installing_
+  * _ownership concept_

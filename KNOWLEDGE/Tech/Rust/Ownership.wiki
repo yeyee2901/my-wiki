@@ -1,0 +1,129 @@
+= Basic =
+Ownership_ adalah konsep di Rust untuk melakukan manajemen memory.
+Tujuan dari terciptanya konsep _ownership_ adalah untuk mengurangi
+kompleksitas manajemen memori secara manual. And yes, Rust punya
+`garbage collector` (namun beberapa orang tidak menyebutnya demikian),
+namun walaupun dengan adanya _garbage collector_, manajemen memori Rust
+seperti _alloc_ tetap dapat dilakukan secara manual, C-style, *_BUT_*, without
+calls to `free()` bullshits.
+
+Di Rust, konsep free-ing memory sudah di-handle secara otomatis, mainly
+menggunakan konsep _ownership_ tersebut. Ada 3 main rule yang harus ditaati
+setiap saat agar dapat memahami konsep _ownership_:
+
+  ===Ownership Rules===
+  1) Setiap `value` memiliki `variable` sebagai `owner`, namun setiap `owner`
+     tidak harus memiliki `value`
+  2) Setiap `value` hanya boleh terikat pada 1 `owner` pada saat yang sama.
+  3) Ketika `owner` *keluar scope*, maka `value` akan di _drop_ (free())
+
+*Korelasi Rule #1 & #2*: Setiap value hanya boleh dimiliki oleh 1 owner,
+mengimplikasikan, bahwa untuk setiap `dynamic data` (yang di simpan di _heap_),
+ownership akan selalu berpindah ke variable baru saat terjadi re-assignment.
+Kejadian pemindahan ownership ini disebut `move` / `moving` (verb). Variable
+yang value-nya telah di `move`, akan menjadi tidak valid.
+
+{{{rust
+  let string1 = String::from("Hello");
+  let string2 = string1;        // <- Value string1 di `move` kesini
+
+  // error karena `string1` sudah tidak punya isi
+  // karena value nya di `move` ke string2
+  println!("{} {}", string1, string2) 
+
+  // error juga karena value `string2` sudah dipindahkan
+  // ke dalam scope macro println sebelumnya
+  println!("{}", string2)
+}}}
+    
+= Borrowing & Reference =
+Jika ingin memodifikasi / mengubah nilai / melakukan hal lain seperti print
+tanpa `mengambil ownership` dari suatu _value_, maka ada konsep `borrowing`.
+`Borrowing` dilakukan dengan cara menggunakan operator `&` , atau 
+`reference operator`. Poin pentingnya adalah, "jika `owner` menjadi
+tidak valid, maka semua value yang di `borrow` akan menjadi
+tidak valid juga."
+Poin tersebutlah yang membuat Rust `Memory safe`.
+{{{rust
+  let string1 = String::from("Hello");
+  let string2 = &string1;        // <- Value string1 di `borrow`
+
+  // no error, karena string1 masih valid
+  // masih valid karena tidak ada pemindahan ownership
+  println!("{} {}", string1, string2) 
+}}}
+
+= Mutable Reference Rules =
+Jika ingin memodifikasi, maka peraturannya adalah:
+1) *OWNER dan REFERENCE harus sama2 bersifat explicitly mutable*.
+{{{rust
+// immutable string
+let string1 = String::from("Hello");
+
+// *akan ada error:* 
+// "cannot borrow string1 as mutable because string1
+// is declared as immutable"
+let string2 = &mut string1;       // <- &mut = mutable reference
+                                  // reference nya immutable, tapi value yang di borrow mutable
+
+
+// no error
+let mut string1 = String::("Hello2");
+let string2 = &mut string1;
+}}}
+2) Peraturan selanjutnya, dalam satu scope, either:
+  a) Hanya boleh ada satu mutable reference yang menunjuk pada 1 objek yang sama,
+  b) Tidak boleh ada mutable reference & immutable reference yang menunjuk ke objek
+     yang sama.
+{{{rust
+  // example #1
+  {
+    let mut string1 = String::from("Hello");
+    let string2 = &string1;     // okay
+    let string3 = &string1;     // still okay, karena string2 & string3 sama2 immutable ref
+
+    let string4 = &mut string1; // NOT OKAY
+  }
+
+  // example #2
+  {
+    let mut string1 = String::from("Hello");
+    let string2 = &mut string1;   // okay
+    let string3 = &mut string1;   // NOT OKAY
+  }
+}}}
+   
+
+==Penjelasan example #1==
+Mengapa dalam satu scope tidak boleh ada mutable & immutable ref ke objek yang sama,
+adalah karena reference yang immutable, `does not expect the value to change`.
+Here's some analogy:
+  *  *string2*  : "alright, I'm immutable reference, and let me just hold on to 'Hello'"
+  *  *string4*  : "Maybe I'll try to clean the string with `.clear()` to save memory"
+  
+  some time later, still in the same scope...
+  *  *string2 & string3*  : "Wha? I thought it was 'Hello', how come it's empty now?"
+  
+  
+==Penjelasan example #2==
+Dalam contoh ini, Rust menghindari `data race` dengan cara yang sangat efisien.
+Dalam kasus ini, lebih mudah menganalogikannya dalam berbagai contoh `async programming`.
+Misalnya pada kasus multi-threading,
+
+  * string2 memodifikasi memori string1 dari Thread A
+  * string3 memodifikasi memori string1 juga, namun dari Thread B
+  * At some point, Thread A & B sama-sama mengakses memori string1 secara bersamaan
+
+Guess what happen? Siapa yang mulai / selesai duluan tidak masalah,
+karena bila kita memodifikasi memori yang sedang dalam proses modifikasi jenis apapun,
+We'll most likely get _corrupted_ / _junk data_.  Kasus inilah yang dinamakan `data race`.
+
+Kasus seperti ini, dalam pemrograman system lainnya (seperti C), dapat diatasi dengan
+`mutex lock (mutual exclusion)`, dimana sebuah `lock flag` dibuat sedemikian rupa, agar 
+"*hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama*".
+Ketika process A sedang mengakses 1 memori, maka access ke memori tersebut *dikunci*
+sampai process A selesai, sehingga process lain harus menunggu process A selesai
+baru bisa mengakses memori tersebut.
+
+Dalam Rust, behavior `mutex locking` untuk menghindari `data racing` tersebut
+dilakukan secara implisit melalui [[#Mutable Reference Rules|Mutable Reference Rule #2a]].

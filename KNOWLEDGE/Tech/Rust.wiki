@@ -1,0 +1,3 @@
+* [[Rust/Installation & Setup|Installation & Setup]]
+* [[Rust/Cargo|Using cargo]]
+* [[Rust/Ownership|Understanding ownership concept]]

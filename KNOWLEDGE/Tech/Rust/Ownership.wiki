@@ -36,6 +36,9 @@ yang value-nya telah di `move`, akan menjadi tidak valid.
   println!("{}", string2)
 }}}
     
+<br>
+
+
 = Borrowing & Reference =
 Jika ingin memodifikasi / mengubah nilai / melakukan hal lain seperti print
 tanpa `mengambil ownership` dari suatu _value_, maka ada konsep `borrowing`.
@@ -52,8 +55,9 @@ Poin tersebutlah yang membuat Rust `Memory safe`.
   // masih valid karena tidak ada pemindahan ownership
   println!("{} {}", string1, string2) 
 }}}
+<br>
 
-= Mutable Reference Rules =
+=== Mutable Reference Rules ===
 Jika ingin memodifikasi, maka peraturannya adalah:
 1) *OWNER dan REFERENCE harus sama2 bersifat explicitly mutable*.
 {{{rust
@@ -76,25 +80,24 @@ let string2 = &mut string1;
   b) Tidak boleh ada mutable reference & immutable reference yang menunjuk ke objek
      yang sama.
 {{{rust
-  // example #1
-  {
-    let mut string1 = String::from("Hello");
-    let string2 = &string1;     // okay
-    let string3 = &string1;     // still okay, karena string2 & string3 sama2 immutable ref
+// example #1
+{
+  let mut string1 = String::from("Hello");
+  let string2 = &string1;     // okay
+  let string3 = &string1;     // still okay, karena string2 & string3 sama2 immutable ref
 
-    let string4 = &mut string1; // NOT OKAY
-  }
+  let string4 = &mut string1; // NOT OKAY
+}
 
-  // example #2
-  {
-    let mut string1 = String::from("Hello");
-    let string2 = &mut string1;   // okay
-    let string3 = &mut string1;   // NOT OKAY
-  }
+// example #2
+{
+  let mut string1 = String::from("Hello");
+  let string2 = &mut string1;   // okay
+  let string3 = &mut string1;   // NOT OKAY
+}
 }}}
-   
 
-==Penjelasan example #1==
+====Penjelasan example #1====
 Mengapa dalam satu scope tidak boleh ada mutable & immutable ref ke objek yang sama,
 adalah karena reference yang immutable, `does not expect the value to change`.
 Here's some analogy:
@@ -105,7 +108,7 @@ Here's some analogy:
   *  *string2 & string3*  : "Wha? I thought it was 'Hello', how come it's empty now?"
   
   
-==Penjelasan example #2==
+====Penjelasan example #2====
 Dalam contoh ini, Rust menghindari `data race` dengan cara yang sangat efisien.
 Dalam kasus ini, lebih mudah menganalogikannya dalam berbagai contoh `async programming`.
 Misalnya pada kasus multi-threading,

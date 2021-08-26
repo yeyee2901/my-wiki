@@ -38,10 +38,10 @@
               <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Find Me On: 
               </a>
-              <ul class="dropdown-menu pl-1 pb-1" aria-labelledby="navbarDropdownMenuLink">
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <!-- Github -->
                 <li>
-                  <a class="nav-link active" href="https://github.com/yeyee2901/" target="_blank">
+                  <a class="ml-2 nav-link active" href="https://github.com/yeyee2901/" target="_blank">
                     <img src="http://pngimg.com/uploads/github/github_PNG40.png" 
                     width="30" 
                     height="30" 
@@ -52,7 +52,7 @@
                   </a>
                 </li>
                 <li>
-                  <a class="nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
+                  <a class="ml-2 nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" 
                     width="30" 
                     height="30" 
@@ -69,7 +69,6 @@
           </div>
         </nav>
       </div>
-
 
       <div class='container'>
         
@@ -125,6 +124,11 @@ yang value-nya telah di <code>move</code>, akan menjadi tidak valid.
   println!("{}", string2)
 </pre>
     
+<p>
+<br>
+</p>
+
+
 <div id="Borrowing &amp; Reference"><h1 id="Borrowing &amp; Reference" class="header"><a href="#Borrowing &amp; Reference">Borrowing &amp; Reference</a></h1></div>
 <p>
 Jika ingin memodifikasi / mengubah nilai / melakukan hal lain seperti print
@@ -143,14 +147,17 @@ Poin tersebutlah yang membuat Rust <code>Memory safe</code>.
   // masih valid karena tidak ada pemindahan ownership
   println!("{} {}", string1, string2) 
 </pre>
+<p>
+<br>
+</p>
 
-<div id="Mutable Reference Rules"><h1 id="Mutable Reference Rules" class="header"><a href="#Mutable Reference Rules">Mutable Reference Rules</a></h1></div>
+<div id="Borrowing &amp; Reference-Mutable Reference Rules"><h3 id="Mutable Reference Rules" class="header"><a href="#Borrowing &amp; Reference-Mutable Reference Rules">Mutable Reference Rules</a></h3></div>
 <p>
 Jika ingin memodifikasi, maka peraturannya adalah:
 </p>
 <ol>
 <li>
-<span id="Mutable Reference Rules-OWNER dan REFERENCE harus sama2 bersifat explicitly mutable"></span><strong id="OWNER dan REFERENCE harus sama2 bersifat explicitly mutable">OWNER dan REFERENCE harus sama2 bersifat explicitly mutable</strong>.
+<span id="Borrowing &amp; Reference-Mutable Reference Rules-OWNER dan REFERENCE harus sama2 bersifat explicitly mutable"></span><strong id="OWNER dan REFERENCE harus sama2 bersifat explicitly mutable">OWNER dan REFERENCE harus sama2 bersifat explicitly mutable</strong>.
 <pre rust>
 // immutable string
 let string1 = String::from("Hello");
@@ -178,28 +185,27 @@ Hanya boleh ada satu mutable reference yang menunjuk pada 1 objek yang sama,
 Tidak boleh ada mutable reference &amp; immutable reference yang menunjuk ke objek
      yang sama.
 <pre rust>
-  // example #1
-  {
-    let mut string1 = String::from("Hello");
-    let string2 = &amp;string1;     // okay
-    let string3 = &amp;string1;     // still okay, karena string2 &amp; string3 sama2 immutable ref
+// example #1
+{
+  let mut string1 = String::from("Hello");
+  let string2 = &amp;string1;     // okay
+  let string3 = &amp;string1;     // still okay, karena string2 &amp; string3 sama2 immutable ref
 
-    let string4 = &amp;mut string1; // NOT OKAY
-  }
+  let string4 = &amp;mut string1; // NOT OKAY
+}
 
-  // example #2
-  {
-    let mut string1 = String::from("Hello");
-    let string2 = &amp;mut string1;   // okay
-    let string3 = &amp;mut string1;   // NOT OKAY
-  }
+// example #2
+{
+  let mut string1 = String::from("Hello");
+  let string2 = &amp;mut string1;   // okay
+  let string3 = &amp;mut string1;   // NOT OKAY
+}
 </pre>
 
 </ol>
 </ol>
-   
 
-<div id="Mutable Reference Rules-Penjelasan example #1"><h2 id="Penjelasan example #1" class="header"><a href="#Mutable Reference Rules-Penjelasan example #1">Penjelasan example #1</a></h2></div>
+<div id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #1"><h4 id="Penjelasan example #1" class="header"><a href="#Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #1">Penjelasan example #1</a></h4></div>
 <p>
 Mengapa dalam satu scope tidak boleh ada mutable &amp; immutable ref ke objek yang sama,
 adalah karena reference yang immutable, <code>does not expect the value to change</code>.
@@ -207,10 +213,10 @@ Here's some analogy:
 </p>
 <ul>
 <li>
- <span id="Mutable Reference Rules-Penjelasan example #1-string2"></span><strong id="string2">string2</strong>  : "alright, I'm immutable reference, and let me just hold on to 'Hello'"
+ <span id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #1-string2"></span><strong id="string2">string2</strong>  : "alright, I'm immutable reference, and let me just hold on to 'Hello'"
 
 <li>
- <span id="Mutable Reference Rules-Penjelasan example #1-string4"></span><strong id="string4">string4</strong>  : "Maybe I'll try to clean the string with <code>.clear()</code> to save memory"
+ <span id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #1-string4"></span><strong id="string4">string4</strong>  : "Maybe I'll try to clean the string with <code>.clear()</code> to save memory"
 
 </ul>
   
@@ -219,12 +225,12 @@ Here's some analogy:
 </p>
 <ul>
 <li>
- <span id="Mutable Reference Rules-Penjelasan example #1-string2 &amp; string3"></span><strong id="string2 &amp; string3">string2 &amp; string3</strong>  : "Wha? I thought it was 'Hello', how come it's empty now?"
+ <span id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #1-string2 &amp; string3"></span><strong id="string2 &amp; string3">string2 &amp; string3</strong>  : "Wha? I thought it was 'Hello', how come it's empty now?"
 
 </ul>
   
   
-<div id="Mutable Reference Rules-Penjelasan example #2"><h2 id="Penjelasan example #2" class="header"><a href="#Mutable Reference Rules-Penjelasan example #2">Penjelasan example #2</a></h2></div>
+<div id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #2"><h4 id="Penjelasan example #2" class="header"><a href="#Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #2">Penjelasan example #2</a></h4></div>
 <p>
 Dalam contoh ini, Rust menghindari <code>data race</code> dengan cara yang sangat efisien.
 Dalam kasus ini, lebih mudah menganalogikannya dalam berbagai contoh <code>async programming</code>.
@@ -252,8 +258,8 @@ We'll most likely get <em>corrupted</em> / <em>junk data</em>.  Kasus inilah yan
 <p>
 Kasus seperti ini, dalam pemrograman system lainnya (seperti C), dapat diatasi dengan
 <code>mutex lock (mutual exclusion)</code>, dimana sebuah <code>lock flag</code> dibuat sedemikian rupa, agar 
-"<span id="Mutable Reference Rules-Penjelasan example #2-hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama"></span><strong id="hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama">hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama</strong>".
-Ketika process A sedang mengakses 1 memori, maka access ke memori tersebut <span id="Mutable Reference Rules-Penjelasan example #2-dikunci"></span><strong id="dikunci">dikunci</strong>
+"<span id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #2-hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama"></span><strong id="hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama">hanya 1 thread / process yang dapat mengakses suatu memori pada 1 waktu yang sama</strong>".
+Ketika process A sedang mengakses 1 memori, maka access ke memori tersebut <span id="Borrowing &amp; Reference-Mutable Reference Rules-Penjelasan example #2-dikunci"></span><strong id="dikunci">dikunci</strong>
 sampai process A selesai, sehingga process lain harus menunggu process A selesai
 baru bisa mengakses memori tersebut.
 </p>

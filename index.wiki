@@ -1,11 +1,31 @@
 %title Y2 Wiki
 
-== Tech ==
-===== [[KNOWLEDGE/Tech/dotfiles|How to create .dotfiles]] =====
-Menjelaskan bagaimana membuat repository `dotfiles` untuk
-manajemen file config. [[KNOWLEDGE/Tech/dotfiles|Read article...]]
-
-===== [[KNOWLEDGE/Tech/Rust|Rust Programming Language]] =====
+== Technologies ==
+==== [[KNOWLEDGE/Tech/Rust|Rust Programming Language]] ====
 Bahasa pemrograman terfavorit berdasarkan
 [[https://insights.stackoverflow.com/survey/2021/?fbclid=IwAR0rlPeqAKkUoZ6JISG3sy_lnh7IfyBT5WhilByukvNnj7l7PbzOlsNA6gs#technology-most-loved-dreaded-and-wanted|Stack Overflow Survey 2021]].
 [[KNOWLEDGE/Tech/Rust|Read more...]]
+
+<br><br>
+
+== Embedded Systems ==
+==== [[KNOWLEDGE/Embedded/AVR|Bare Metal AVR]] ====
+Pemrograman mikrokontroler dengan famili `AVR` produksi *Atmel Corp.* (telah diakuisisi
+oleh *Microchip Technology Inc.*). Belajar memprogram _the hard way_ ,
+tanpa menggunakan IDE, hanya berbekal _toolchain AVR_ dan _text editor_ pilihan bebas.
+[[KNOWLEDGE/Embedded/AVR|Read more...]]
+
+<br>
+
+==== [[KNOWLEDGE/Embedded/PlatformIO|PlatformIO]] ====
+Platform pengembangan embedded system yang modern & fleksibel untuk
+berbagai famili mikrokontroler, contohnya Microchip `AVR`, Tensilica `ESP8266/32`,
+dan STMicroelectronics `STM32`.
+[[KNOWLEDGE/Embedded/PlatformIO|Read more...]]
+
+<br><br>
+
+== Other ==
+==== [[KNOWLEDGE/Other/dotfiles|How to create .dotfiles]] ====
+Menjelaskan bagaimana membuat repository `dotfiles` untuk
+manajemen file config. [[KNOWLEDGE/Other/dotfiles|Read article...]]

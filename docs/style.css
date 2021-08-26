@@ -32,7 +32,7 @@ ul ul, ul ol, ol ol, ol ul {
 li { margin: 0.3em auto; }
 
 ul {
-  margin-left: 2em;
+  margin-left: 0;
   padding-left: 0;
 }
 

@@ -38,10 +38,10 @@
               <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Find Me On: 
               </a>
-              <ul class="dropdown-menu pl-1 pb-1" aria-labelledby="navbarDropdownMenuLink">
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <!-- Github -->
                 <li>
-                  <a class="nav-link active" href="https://github.com/yeyee2901/" target="_blank">
+                  <a class="ml-2 nav-link active" href="https://github.com/yeyee2901/" target="_blank">
                     <img src="http://pngimg.com/uploads/github/github_PNG40.png" 
                     width="30" 
                     height="30" 
@@ -52,7 +52,7 @@
                   </a>
                 </li>
                 <li>
-                  <a class="nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
+                  <a class="ml-2 nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" 
                     width="30" 
                     height="30" 
@@ -70,7 +70,6 @@
         </nav>
       </div>
 
-
       <div class='container'>
         
 
@@ -82,6 +81,11 @@ Termasuk dalam bundle: <code>rustc</code> (compiler), <code>cargo</code> (packag
 <pre bash>
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 </pre>
+
+<p>
+<br>
+</p>
+
 
 <div id="Install Rust Support Tools"><h2 id="Install Rust Support Tools" class="header"><a href="#Install Rust Support Tools">Install Rust Support Tools</a></h2></div>
 <ol>
@@ -140,6 +144,11 @@ Apa yang akan muncul di editor:
 let number: i32 = 30;
 </pre>
 
+<p>
+<br>
+</p>
+
+
 <div id="Neovim - Setup Rust Analyzer"><h2 id="Neovim - Setup Rust Analyzer" class="header"><a href="#Neovim - Setup Rust Analyzer">Neovim - Setup Rust Analyzer</a></h2></div>
 <p>
 Pastikan punya package manager untuk instalasi plugin neovim lebih mudah. Neovim modern
@@ -158,33 +167,27 @@ Pertama yang kita butuhkan adalah <em>boiler plate</em> untuk setup LSP. Boiler
    <span id="Neovim - Setup Rust Analyzer-Vim-plug"></span><strong id="Vim-plug">Vim-plug</strong>: tambahkan baris ini di <code>init.vim</code>
 <pre vim>
 call plug#begin('your_plugin_directory')
-" Other plugins...
 
 Plug 'neovim/nvim-lspconfig'
 
-" Other plugins...
 call plug#end()
 </pre>
    <span id="Neovim - Setup Rust Analyzer-Packer"></span><strong id="Packer">Packer</strong>: versi <code>init.vim</code>
 <pre vim>
 lua &lt;&lt; EOF
 require('packer').startup(function()
-  use {'wbthomason/packer.nvim'}
+  use('wbthomason/packer.nvim')
 
- -- Other plugins.........
- use {'neovim/nvim-lspconfig'}
- -- Other plugins.........
+  use('neovim/nvim-lspconfig')
 end)
 EOF
 </pre>
    <span id="Neovim - Setup Rust Analyzer-Packer"></span><strong id="Packer">Packer</strong>: versi <code>init.lua</code>
 <pre lua>
 require('packer').startup(function()
- use {'wbthomason/packer.nvim'}
+ use('wbthomason/packer.nvim')
  
- -- Other plugins.........
- use {'neovim/nvim-lspconfig'}
- -- Other plugins.........
+ use('neovim/nvim-lspconfig')
 end)
 </pre>
 
@@ -204,12 +207,12 @@ Setelah install <code>rust-analyzer</code>, kita harus setup Neovim agar dapat '
     <span id="Neovim - Setup Rust Analyzer-Versi 1"></span><strong id="Versi 1">Versi 1</strong>: <code>init.vim</code>
 <pre vim>
 lua &lt;&lt; EOF
-  require('lspconfig').rust_analyzer.setup{}
+  require('lspconfig').rust_analyzer.setup()
 EOF
 </pre>
     <span id="Neovim - Setup Rust Analyzer-Versi 2"></span><strong id="Versi 2">Versi 2</strong>: <code>init.lua</code>
 <pre lua>
-require('lspconfig').rust_analyzer.setup{}
+require('lspconfig').rust_analyzer.setup()
 </pre>
 
 </ol>
@@ -223,7 +226,7 @@ Neovim kita (<code>on_attach</code> event), maka fungsi setup ini akan otomatis 
 Anda dapat menambahkan setup lain di fungsi <code>custom_attach</code> berikut, seperti keymap
 khusus. Dengan demikian anda dapat memiliki setup yang berbeda-beda tergantung
 dari function <code>custom_attach</code> yang dimasukkan ke setup masing-masing LSP. Fungsi
-<code>custom_attach</code> harus di bind ke table-key yang bernama <code>on_attach</code>.
+<code>custom_attach</code> harus di bind ke table-key yang bernama <code>on_attach</code>. 
 </p>
 
 <p>
@@ -231,15 +234,15 @@ dari function <code>custom_attach</code> yang dimasukkan ke setup masing-masing 
 </p>
 <pre vim>
 lua &lt;&lt; EOF
-  local function on_attach(client, bufnr)
+  local on_attach = function(client, bufnr)
     if client.resolved_capabilities.document_formatting then
       vim.cmd("autocmd BufWritePost &lt;buffer&gt; lua vim.lsp.buf.formatting_seq_sync()")
     end
   end
   
-  require('lspconfig').rust_analyzer.setup{
+  require('lspconfig').rust_analyzer.setup({
     on_attach = custom_attach,
-  }
+  })
 EOF
 </pre>
 <p>
@@ -252,10 +255,20 @@ local function on_attach(client, bufnr)
   end
 end
 
-require('lspconfig').rust_analyzer.setup{
+require('lspconfig').rust_analyzer.setup({
   on_attach = custom_attach,
-}
+})
 </pre>
+
+<div id="Neovim - Rust Auto-formatter-Catatan Fitur Autoformatting"><h4 id="Catatan Fitur Autoformatting" class="header"><a href="#Neovim - Rust Auto-formatter-Catatan Fitur Autoformatting">Catatan Fitur Autoformatting</a></h4></div>
+<p>
+Perlu dicatat juga bahwa sumber dari fitur autoformatting ini berasal dari <em>language server</em>
+masing-masing bahasa pemrograman. Jadi apabila anda merasa sudah <em>enable</em> setting ini
+di config neovim, namun tidak auto format ketika save file, bisa diasumsikan
+<em>language server</em> nya tidak memiliki fitur autoformatting. Contoh yang pernah penulis
+alami adalah pada <code>pyright</code>. Yang penulis bisa pastikan memiliki fitur autoformatting
+adalah, <code>rust-analyzer</code>, <code>clangd</code>, <code>ccls</code>, dan <code>tsserver</code>.
+</p>
 
       </div>
 

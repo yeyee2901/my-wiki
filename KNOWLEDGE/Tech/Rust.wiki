@@ -3,10 +3,14 @@
 Quick notes untuk install setup Rust, diantaranya `rustc`, `cargo`, `rust-analyzer`
 untuk mulai development in Rust. [[Rust/Installation & Setup|Read article...]]
 
+<br>
+
 ==[[Rust/Cargo|Using cargo]]==
 Cargo merupakan package manager dari Rust. Most modern programming language
 pasti punya sekarang, contohnya Python punya `pip`, Javascript punya `npm`
 (untuk Node.js JS runtime), dll. [[Rust/Cargo|Read article...]]
+
+<br>
 
 ==[[Rust/Ownership|Understanding ownership concept]]==
 _Ownership_ merupakan konsep baru dalam dunia pemrograman yang dikenalkan oleh

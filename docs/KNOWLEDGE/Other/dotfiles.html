@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Rust - Contents</title>
+        <title>dotfiles</title>
     </head>
     <body>
 
@@ -72,34 +72,109 @@
 
       <div class='container'>
         
-<div id="[[Rust/Installation &amp; Setup|Installation &amp; Setup]]"><h2 id="[[Rust/Installation &amp; Setup|Installation &amp; Setup]]" class="header"><a href="#[[Rust/Installation &amp; Setup|Installation &amp; Setup]]"><a href="Rust/Installation &amp; Setup.html">Installation &amp; Setup</a></a></h2></div>
+<div id="Brief"><h1 id="Brief" class="header"><a href="#Brief">Brief</a></h1></div>
 <p>
-Quick notes untuk install setup Rust, diantaranya <code>rustc</code>, <code>cargo</code>, <code>rust-analyzer</code>
-untuk mulai development in Rust. <a href="Rust/Installation &amp; Setup.html">Read article...</a>
+<code>dotfiles</code> adalah salah satu cara me-<em>manage</em> setting-setting
+yang sering digunakan. Contohnya setting dari file 
+<code>.zshrc</code>, <code>.bashrc</code>, <code>~/.config/</code> . Semua dari file tersebut memiliki
+prefix '.' (dot), that's why it's refered to as '<code>dotfiles</code>'.
 </p>
+
+<p>
+Manajemen dotfiles dapat dilakukan dengan banyak cara, dan
+kenyamanan setiap orang berbeda-beda. Ada yang menggunakan <a href="https://www.gnu.org/software/stow/">GNU Stow</a> 
+untuk manajemen <code>dotfiles</code> berbasis <em>sym-link</em>, ada juga yang lebih 
+nyaman menggunakan <em>git</em>. 
+</p>
+
+<p>
+Secara umum, lebih simple menggunakan <em>git</em> (pre-requisites hanya install git),
+namun untuk struktur dotfiles yang lebih teratur, manajemen dotfiles menggunakan
+<em>GNU Stow</em> lebih unggul.
+</p>
+
+<div id="Brief-Init Dotfiles"><h3 id="Init Dotfiles" class="header"><a href="#Brief-Init Dotfiles">Init Dotfiles</a></h3></div>
+<ol>
+<li>
+Starting from scratch, harus buat --bare repostiory dulu
+<pre bash>
+git init --bare $HOME/.dotfiles
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+dotfiles config --local status.showUntrackedFiles no
+echo "alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" &gt; alias.txt
+
+# or manually add in .bashrc (make sure this is also loaded by your shell)
+# alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+</pre>
+
+<li>
+Selanjutnya bisa interaksi dengan dotfiles seperti git repository biasanya.
+<pre bash>
+dotfiles status
+dotfiles add .zshrc
+# dan seterusnya
+</pre>
+
+</ol>
 
 <p>
 <br>
 </p>
 
-<div id="[[Rust/Cargo|Using cargo]]"><h2 id="[[Rust/Cargo|Using cargo]]" class="header"><a href="#[[Rust/Cargo|Using cargo]]"><a href="Rust/Cargo.html">Using cargo</a></a></h2></div>
-<p>
-Cargo merupakan package manager dari Rust. Most modern programming language
-pasti punya sekarang, contohnya Python punya <code>pip</code>, Javascript punya <code>npm</code>
-(untuk Node.js JS runtime), dll. <a href="Rust/Cargo.html">Read article...</a>
-</p>
+<div id="Brief-Sync Dotfiles with remote"><h3 id="Sync Dotfiles with remote" class="header"><a href="#Brief-Sync Dotfiles with remote">Sync Dotfiles with remote</a></h3></div>
+<ol>
+<li>
+Pastikan di remote, ada <em>alias</em> nya seperti ini:
+<pre bash>
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+</pre>
 
-<p>
-<br>
-</p>
+<li>
+Buat <code>.gitignore</code> di <code>$HOME</code> (<span id="Brief-Sync Dotfiles with remote-PENTING"></span><strong id="PENTING">PENTING</strong>), isi dengan:
+<pre .gitignore>
+.dotfiles
+</pre>
 
-<div id="[[Rust/Ownership|Understanding ownership concept]]"><h2 id="[[Rust/Ownership|Understanding ownership concept]]" class="header"><a href="#[[Rust/Ownership|Understanding ownership concept]]"><a href="Rust/Ownership.html">Understanding ownership concept</a></a></h2></div>
-<p>
-<em>Ownership</em> merupakan konsep baru dalam dunia pemrograman yang dikenalkan oleh
-Rust, dan merupakan fitur utamanya yang diunggulkan.  Dengan fitur <em>ownership</em>
-ini, program yang di build dari Rust akan menjadi lebih kokoh, terutama dalam
-segi kekebalan terhadap <code>data race</code> dan <code>memory leak</code>. <a href="Rust/Ownership.html">Read article...</a>
-</p>
+<ul>
+<li>
+Kalau tidak di ignore, nanti recursive
+
+</ul>
+<li>
+<em>clone</em> dari remote
+<pre bash>
+git clone --bare &lt;remote_repo&gt; $HOME/.dotfiles
+</pre>
+
+<li>
+buat <em>alias</em> sementara di shell session ini.
+<pre bash>
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+</pre>
+
+<li>
+<em>sync</em> dengan <code>checkout</code>
+<pre bash>
+dotfiles checkout 
+</pre>
+
+<ul>
+<li>
+step diatas kemungkinan besar akan gagal (<em>uncommited files</em>)
+
+<li>
+Bisa jadi karena sudah ada file <code>.zshrc</code>, <code>.gitignore</code>, etc.. 
+      di system, remove it.
+
+</ul>
+<li>
+Set dotfiles agar tidak show  <em>untracked files</em> (explicit config)
+<pre bash>
+dotfiles config --local status.showUntrackedFiles no
+</pre>
+
+</ol>
 
       </div>
 

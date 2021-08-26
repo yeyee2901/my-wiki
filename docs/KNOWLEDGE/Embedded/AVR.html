@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>dotfiles</title>
+        <title>AVR</title>
     </head>
     <body>
 
@@ -38,10 +38,10 @@
               <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Find Me On: 
               </a>
-              <ul class="dropdown-menu pl-1 pb-1" aria-labelledby="navbarDropdownMenuLink">
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <!-- Github -->
                 <li>
-                  <a class="nav-link active" href="https://github.com/yeyee2901/" target="_blank">
+                  <a class="ml-2 nav-link active" href="https://github.com/yeyee2901/" target="_blank">
                     <img src="http://pngimg.com/uploads/github/github_PNG40.png" 
                     width="30" 
                     height="30" 
@@ -52,7 +52,7 @@
                   </a>
                 </li>
                 <li>
-                  <a class="nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
+                  <a class="ml-2 nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" 
                     width="30" 
                     height="30" 
@@ -70,110 +70,30 @@
         </nav>
       </div>
 
-
       <div class='container'>
         
-<div id="Brief"><h1 id="Brief" class="header"><a href="#Brief">Brief</a></h1></div>
-<p>
-<code>dotfiles</code> adalah salah satu cara me-<em>manage</em> setting-setting
-yang sering digunakan. Contohnya setting dari file 
-<code>.zshrc</code>, <code>.bashrc</code>, <code>~/.config/</code> . Semua dari file tersebut memiliki
-prefix '.' (dot), that's why it's refered to as '<code>dotfiles</code>'.
-</p>
+<div id="Instalasi Toolchain &amp; Setup Environment"><h2 id="Instalasi Toolchain &amp; Setup Environment" class="header"><a href="#Instalasi Toolchain &amp; Setup Environment">Instalasi Toolchain &amp; Setup Environment</a></h2></div>
+
 
 <p>
-Manajemen dotfiles dapat dilakukan dengan banyak cara, dan
-kenyamanan setiap orang berbeda-beda. Ada yang menggunakan <a href="https://www.gnu.org/software/stow/">GNU Stow</a> 
-untuk manajemen <code>dotfiles</code> berbasis <em>sym-link</em>, ada juga yang lebih 
-nyaman menggunakan <em>git</em>. 
+<br>
 </p>
+
+<div id="Beginner"><h2 id="Beginner" class="header"><a href="#Beginner">Beginner</a></h2></div>
+
 
 <p>
-Secara umum, lebih simple menggunakan <em>git</em> (pre-requisites hanya install git),
-namun untuk struktur dotfiles yang lebih teratur, manajemen dotfiles menggunakan
-<em>GNU Stow</em> lebih unggul.
+<br>
 </p>
 
-<div id="Init Dotfiles"><h1 id="Init Dotfiles" class="header"><a href="#Init Dotfiles">Init Dotfiles</a></h1></div>
-<ol>
-<li>
-Starting from scratch, harus buat --bare repostiory dulu
-<pre bash>
-git init --bare $HOME/.dotfiles
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-dotfiles config --local status.showUntrackedFiles no
-echo "alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" &gt; alias.txt
-
-# or manually add in .bashrc (make sure this is also loaded by your shell)
-# alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-</pre>
-
-<li>
-Selanjutnya bisa interaksi dengan dotfiles seperti git repository biasanya.
-<pre bash>
-dotfiles status
-dotfiles add .zshrc
-# dan seterusnya
-</pre>
-
-</ol>
+<div id="Intermediate"><h2 id="Intermediate" class="header"><a href="#Intermediate">Intermediate</a></h2></div>
 
 
+<p>
+<br>
+</p>
 
-<div id="Sync Dotfiles with remote"><h1 id="Sync Dotfiles with remote" class="header"><a href="#Sync Dotfiles with remote">Sync Dotfiles with remote</a></h1></div>
-<ol>
-<li>
-Pastikan di remote, ada <em>alias</em> nya seperti ini:
-<pre bash>
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-</pre>
-
-<li>
-Buat <code>.gitignore</code> di <code>$HOME</code> (<span id="Sync Dotfiles with remote-PENTING"></span><strong id="PENTING">PENTING</strong>), isi dengan:
-<pre .gitignore>
-.dotfiles
-</pre>
-
-<ul>
-<li>
-Kalau tidak di ignore, nanti recursive
-
-</ul>
-<li>
-<em>clone</em> dari remote
-<pre bash>
-git clone --bare [[https://github.com/yeyee2901/dotfiles|&lt;repo&gt;]] $HOME/.dotfiles
-</pre>
-
-<li>
-buat <em>alias</em> sementara di shell session ini.
-<pre bash>
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-</pre>
-
-<li>
-<em>sync</em> dengan <code>checkout</code>
-<pre bash>
-dotfiles checkout 
-</pre>
-
-<ul>
-<li>
-step diatas kemungkinan besar akan gagal (<em>uncommited files</em>)
-
-<li>
-Bisa jadi karena sudah ada file <code>.zshrc</code>, <code>.gitignore</code>, etc.. 
-      di system, remove it.
-
-</ul>
-<li>
-Set dotfiles agar tidak show  <em>untracked files</em> (explicit config)
-<pre bash>
-dotfiles config --local status.showUntrackedFiles no
-</pre>
-
-</ol>
+<div id="Advanced"><h2 id="Advanced" class="header"><a href="#Advanced">Advanced</a></h2></div>
 
       </div>
 

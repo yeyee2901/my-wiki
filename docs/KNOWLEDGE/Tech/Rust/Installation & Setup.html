@@ -43,7 +43,7 @@
       <div class='container'>
         
 
-<div id="Install Rust Toolchain"><h4 id="Install Rust Toolchain" class="header"><a href="#Install Rust Toolchain">Install Rust Toolchain</a></h4></div>
+<div id="Install Rust Toolchain"><h2 id="Install Rust Toolchain" class="header"><a href="#Install Rust Toolchain">Install Rust Toolchain</a></h2></div>
 <p>
 Termasuk dalam bundle: <code>rustc</code> (compiler), <code>cargo</code> (package manager),
 <code>rust-gdb</code> &amp; <code>rust-lldb</code> (debugger), <code>rustdoc</code>
@@ -52,7 +52,7 @@ Termasuk dalam bundle: <code>rustc</code> (compiler), <code>cargo</code> (packag
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 </pre>
 
-<div id="Install Rust Support Tools"><h4 id="Install Rust Support Tools" class="header"><a href="#Install Rust Support Tools">Install Rust Support Tools</a></h4></div>
+<div id="Install Rust Support Tools"><h2 id="Install Rust Support Tools" class="header"><a href="#Install Rust Support Tools">Install Rust Support Tools</a></h2></div>
 <ol>
 <li>
 <a href="https://marketplace.visualstudio.com/items?itemName=rust-lang.rust">Visual Studio Code</a> - Tersedia 2 varian: menggunakan <code>rust-analyzer</code> atau <code>RSL</code>
@@ -61,7 +61,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 <a href="https://github.com/rust-lang/rust-enhanced">Sublime Text 3</a>
 
 <li>
-<a href="https://github.com/rust-lang/rust.vim">Vim / Neovim</a> - Setup lebih lanjut akan dijelaskan <a href="Installation & Setup.html#Neovim - Setup Rust Analyzer">di bagian bawah</a>
+<a href="https://github.com/rust-lang/rust.vim">Vim / Neovim</a> - Untuk setup Neovim lebih lanjut akan dijelaskan <a href="Installation & Setup.html#Neovim - Setup Rust Analyzer">di bagian bawah</a>
 
 <li>
 <a href="https://github.com/rust-lang/rust-mode">Emacs</a>
@@ -109,7 +109,7 @@ Apa yang akan muncul di editor:
 let number: i32 = 30;
 </pre>
 
-<div id="Neovim - Setup Rust Analyzer"><h4 id="Neovim - Setup Rust Analyzer" class="header"><a href="#Neovim - Setup Rust Analyzer">Neovim - Setup Rust Analyzer</a></h4></div>
+<div id="Neovim - Setup Rust Analyzer"><h2 id="Neovim - Setup Rust Analyzer" class="header"><a href="#Neovim - Setup Rust Analyzer">Neovim - Setup Rust Analyzer</a></h2></div>
 <p>
 Pastikan punya package manager untuk instalasi plugin neovim lebih mudah. Neovim modern
 umumnya menggunakan <a href="https://github.com/wbthomason/packer.nvim">packer.nvim</a>. Namun, jika anda masih menggunakan
@@ -183,7 +183,7 @@ require('lspconfig').rust_analyzer.setup{}
 
 </ol>
 
-<div id="Neovim - Rust Autoformatter"><h4 id="Neovim - Rust Autoformatter" class="header"><a href="#Neovim - Rust Autoformatter">Neovim - Rust Autoformatter</a></h4></div>
+<div id="Neovim - Rust Auto-formatter"><h2 id="Neovim - Rust Auto-formatter" class="header"><a href="#Neovim - Rust Auto-formatter">Neovim - Rust Auto-formatter</a></h2></div>
 <p>
 Jika ingin menggunakan <em>auto-formatter</em> secara otomatis, maka kita harus buat custom
 setup, yaitu dengan membuat local function untuk memberitahu Neovim, bahwa kita akan
@@ -196,7 +196,7 @@ dari function <code>custom_attach</code> yang dimasukkan ke setup masing-masing 
 </p>
 
 <p>
-<span id="Neovim - Rust Autoformatter-Versi 1"></span><strong id="Versi 1">Versi 1</strong>: <code>init.vim</code>
+<span id="Neovim - Rust Auto-formatter-Versi 1"></span><strong id="Versi 1">Versi 1</strong>: <code>init.vim</code>
 </p>
 <pre vim>
 lua &lt;&lt; EOF
@@ -212,7 +212,7 @@ lua &lt;&lt; EOF
 EOF
 </pre>
 <p>
-<span id="Neovim - Rust Autoformatter-Versi 2"></span><strong id="Versi 2">Versi 2</strong>: <code>init.lua</code>
+<span id="Neovim - Rust Auto-formatter-Versi 2"></span><strong id="Versi 2">Versi 2</strong>: <code>init.lua</code>
 </p>
 <pre lua>
 local function on_attach(client, bufnr)

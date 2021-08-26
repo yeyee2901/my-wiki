@@ -1,16 +1,16 @@
 %title Rust - Installation
 
-==== Install Rust Toolchain ====
+== Install Rust Toolchain ==
 Termasuk dalam bundle: `rustc` (compiler), `cargo` (package manager),
 `rust-gdb` & `rust-lldb` (debugger), `rustdoc`
 {{{bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 }}}
 
-==== Install Rust Support Tools ====
+== Install Rust Support Tools ==
 1. [[https://marketplace.visualstudio.com/items?itemName=rust-lang.rust|Visual Studio Code]] - Tersedia 2 varian: menggunakan `rust-analyzer` atau `RSL`
 2. [[https://github.com/rust-lang/rust-enhanced|Sublime Text 3]]
-3. [[https://github.com/rust-lang/rust.vim|Vim / Neovim]] - Setup lebih lanjut akan dijelaskan [[#Neovim - Setup Rust Analyzer|di bagian bawah]]
+3. [[https://github.com/rust-lang/rust.vim|Vim / Neovim]] - Untuk setup Neovim lebih lanjut akan dijelaskan [[#Neovim - Setup Rust Analyzer|di bagian bawah]]
 4. [[https://github.com/rust-lang/rust-mode|Emacs]]
 5. [[https://github.com/rust-lang/atom-ide-rust|Atom]]
 6. [[https://plugins.jetbrains.com/plugin/8182-rust|Intellij IDEA]]
@@ -40,7 +40,7 @@ Apa yang akan muncul di editor:
 let number: i32 = 30;
 }}}
 
-==== Neovim - Setup Rust Analyzer  ====
+== Neovim - Setup Rust Analyzer  ==
 Pastikan punya package manager untuk instalasi plugin neovim lebih mudah. Neovim modern
 umumnya menggunakan [[https://github.com/wbthomason/packer.nvim|packer.nvim]]. Namun, jika anda masih menggunakan
 [[https://github.com/junegunn/vim-plug|vim-plug]] juga tidak masalah.
@@ -104,7 +104,7 @@ EOF
 require('lspconfig').rust_analyzer.setup{}
     }}}
 
-==== Neovim - Rust Autoformatter ====
+== Neovim - Rust Auto-formatter ==
 Jika ingin menggunakan _auto-formatter_ secara otomatis, maka kita harus buat custom
 setup, yaitu dengan membuat local function untuk memberitahu Neovim, bahwa kita akan
 menggunakan fitur _auto-formatter_. Agar ketika `rust-analyzer` ini terhubung ke 

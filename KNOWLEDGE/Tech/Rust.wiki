@@ -1,15 +1,15 @@
 %title Rust - Contents
-====[[Rust/Installation & Setup|Installation & Setup]]====
+==[[Rust/Installation & Setup|Installation & Setup]]==
 Quick notes untuk install setup Rust, diantaranya `rustc`, `cargo`, `rust-analyzer`
-untuk mulai development in Rust.
+untuk mulai development in Rust. [[Rust/Installation & Setup|Read article...]]
 
-====[[Rust/Cargo|Using cargo]]====
+==[[Rust/Cargo|Using cargo]]==
 Cargo merupakan package manager dari Rust. Most modern programming language
 pasti punya sekarang, contohnya Python punya `pip`, Javascript punya `npm`
-(untuk Node.js JS runtime), dll.
+(untuk Node.js JS runtime), dll. [[Rust/Cargo|Read article...]]
 
-====[[Rust/Ownership|Understanding ownership concept]]====
+==[[Rust/Ownership|Understanding ownership concept]]==
 _Ownership_ merupakan konsep baru dalam dunia pemrograman yang dikenalkan oleh
 Rust, dan merupakan fitur utamanya yang diunggulkan.  Dengan fitur _ownership_
 ini, program yang di build dari Rust akan menjadi lebih kokoh, terutama dalam
-segi kekebalan terhadap `data race` dan `memory leak`.
+segi kekebalan terhadap `data race` dan `memory leak`. [[Rust/Ownership|Read article...]]

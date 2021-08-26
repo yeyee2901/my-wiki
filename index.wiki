@@ -1,10 +1,10 @@
 %title My Personal Knowledge Wiki
 
-== Tech ==
-* [[KNOWLEDGE/Tech/dotfiles|How to create .dotfiles]] - for storing config files.
-  * _Pre-requisites_:
-    * git
+=== Tech ===
+===== [[KNOWLEDGE/Tech/dotfiles|How to create .dotfiles]] =====
+Explains how to create dotfiles for managing configuration files, very useful
+especially if you plan to deploy your setup for multiple machines.
 
-* [[KNOWLEDGE/Tech/Rust|Rust Programming Language]]
-  * _installing_
-  * _ownership concept_
+===== [[KNOWLEDGE/Tech/Rust|Rust Programming Language]] =====
+The most favorite programming language according to
+[[https://insights.stackoverflow.com/survey/2021/?fbclid=IwAR0rlPeqAKkUoZ6JISG3sy_lnh7IfyBT5WhilByukvNnj7l7PbzOlsNA6gs#technology-most-loved-dreaded-and-wanted|Stack Overflow Survey 2021]]

@@ -1,22 +1,22 @@
-* Install package
-{{
-    cargo install <package>
-}}
+*Install package (or 'crates' in Rust terms)*
+{{{bash
+cargo install <package>
+}}}
 
-* Build package (_debug_ build)
-{{
-    cargo build
-}}
+*Build package (_debug_ build)*
+{{{bash
+cargo build
+}}}
 
-* Build & Run (_debug_ build)
-{{
-    cargo run
-    
-    # run with arguments:
-    cargo run -- <args>
-}}
+*Build & Run (_debug_ build)*
+{{{bash
+cargo run
 
-* Build (_release_)
-{{
-    cargo build --release
-}}
+# run with arguments:
+cargo run -- <args>
+}}}
+
+*Build (_release optimized_)*
+{{{bash
+cargo build --release
+}}}

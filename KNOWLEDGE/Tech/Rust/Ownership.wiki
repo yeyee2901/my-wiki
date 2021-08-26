@@ -126,4 +126,4 @@ sampai process A selesai, sehingga process lain harus menunggu process A selesai
 baru bisa mengakses memori tersebut.
 
 Dalam Rust, behavior `mutex locking` untuk menghindari `data racing` tersebut
-dilakukan secara implisit melalui [[#Mutable Reference Rules|Mutable Reference Rule #2a]].
+dilakukan secara implisit melalui [[#Mutable Reference Rules|Mutable Reference Rules]].

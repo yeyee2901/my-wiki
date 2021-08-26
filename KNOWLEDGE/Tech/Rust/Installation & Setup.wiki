@@ -1,1 +1,142 @@
-asdasdasd
+%title Rust - Installation
+
+==== Install Rust Toolchain ====
+Termasuk dalam bundle: `rustc` (compiler), `cargo` (package manager),
+`rust-gdb` & `rust-lldb` (debugger), `rustdoc`
+{{{bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+}}}
+
+==== Install Rust Support Tools ====
+1. [[https://marketplace.visualstudio.com/items?itemName=rust-lang.rust|Visual Studio Code]] - Tersedia 2 varian: menggunakan `rust-analyzer` atau `RSL`
+2. [[https://github.com/rust-lang/rust-enhanced|Sublime Text 3]]
+3. [[https://github.com/rust-lang/rust.vim|Vim / Neovim]] - Setup lebih lanjut akan dijelaskan [[#Neovim - Setup Rust Analyzer|di bagian bawah]]
+4. [[https://github.com/rust-lang/rust-mode|Emacs]]
+5. [[https://github.com/rust-lang/atom-ide-rust|Atom]]
+6. [[https://plugins.jetbrains.com/plugin/8182-rust|Intellij IDEA]]
+
+`rust-analyzer` merupakan _language-server_ yang berfungsi untuk memberikan
+bantuan _code completion_ , _error detection_, dll. _Rust-Analyzer_ sebagian
+besar sudah tersedia untuk editor yang terkanal seperti *Visual Studio Code*,
+*Sublime Text*, *Neovim*, dll.
+
+Untuk bantuan support lainnya, seperti _automatic type_ infer, dapat install extension
+atau plugin. Silahkan coba search di extension browser masing-masing editor untuk
+mencarinya. Namun, _personally_ author menilai hal ini tidak terlalu diperlukan, karena
+agaknya tools ini sedikit berat. `rust-analyzer` sudah sangat cukup membantu dalam
+proses development dalam Rust.
+
+Berikut contoh salah satu bantuan dari Rust extension (I forget the name, if somebody
+can confirm this, please post an issue at my [[https://github.com/yeyee2901/my-wiki|repository]]).
+
+Apa yang kita ketik di editor:
+{{{rust
+let number = 30;
+}}}
+
+Apa yang akan muncul di editor:
+{{{rust
+// Ini terjadi karena default integer di Rust adalah 32-bit
+let number: i32 = 30;
+}}}
+
+==== Neovim - Setup Rust Analyzer  ====
+Pastikan punya package manager untuk instalasi plugin neovim lebih mudah. Neovim modern
+umumnya menggunakan [[https://github.com/wbthomason/packer.nvim|packer.nvim]]. Namun, jika anda masih menggunakan
+[[https://github.com/junegunn/vim-plug|vim-plug]] juga tidak masalah.
+
+1. Pertama yang kita butuhkan adalah _boiler plate_ untuk setup LSP. Boiler
+   plate ini diperlukan agar kita tidak setup LSP dari awal lagi, melainkan
+   cukup dengan memanggil 1 fungsi setup saja untuk setiap language server
+   Neovim sudah menyediakan _boiler plate_ tersebut di repository
+   [[https://github.com/neovim/nvim-lspconfig|neovim/nvim-lspconfig]], dan
+   dapat kita tambahkan ke daftar plugin Neovim kita.
+   *Vim-plug*: tambahkan baris ini di `init.vim`
+   {{{vim
+call plug#begin('your_plugin_directory')
+" Other plugins...
+
+Plug 'neovim/nvim-lspconfig'
+
+" Other plugins...
+call plug#end()
+     }}}
+   *Packer*: versi `init.vim`
+   {{{vim
+lua << EOF
+require('packer').startup(function()
+  use {'wbthomason/packer.nvim'}
+
+ -- Other plugins.........
+ use {'neovim/nvim-lspconfig'}
+ -- Other plugins.........
+end)
+EOF
+   }}}
+   *Packer*: versi `init.lua`
+   {{{lua
+require('packer').startup(function()
+ use {'wbthomason/packer.nvim'}
+ 
+ -- Other plugins.........
+ use {'neovim/nvim-lspconfig'}
+ -- Other plugins.........
+end)
+   }}}
+2. Selanjutnya, `rust-analyzer` harus kita install dan pastikan berada di dalam `$PATH`
+    sistem kita. Apabila kita menginstall `rustup` melalui [[#Install Rust Toolchain|cara diatas]] (melalui `curl`),
+    maka seharusnya tidak akan ada masalah `$PATH` not found. Buka terminal, dan jalankan
+    `cargo` untuk install `rust-analyzer`.
+  {{{bash
+cargo install rust-analyzer
+  }}}
+3. Setelah install `rust-analyzer`, kita harus setup Neovim agar dapat 'berkomunikasi'
+    dengan `rust-analyzer`. Nah komunikasi ini yang sangat terbantu dengan plugin
+    `nvim-lspconfig`. Tambahkan baris config dibawah ini *SETELAH* bagian setup plugin.
+    *Versi 1*: `init.vim`
+    {{{vim
+lua << EOF
+  require('lspconfig').rust_analyzer.setup{}
+EOF
+      }}}
+    *Versi 2*: `init.lua`
+    {{{lua
+require('lspconfig').rust_analyzer.setup{}
+    }}}
+
+==== Neovim - Rust Autoformatter ====
+Jika ingin menggunakan _auto-formatter_ secara otomatis, maka kita harus buat custom
+setup, yaitu dengan membuat local function untuk memberitahu Neovim, bahwa kita akan
+menggunakan fitur _auto-formatter_. Agar ketika `rust-analyzer` ini terhubung ke 
+Neovim kita (`on_attach` event), maka fungsi setup ini akan otomatis dipanggil. 
+Anda dapat menambahkan setup lain di fungsi `custom_attach` berikut, seperti keymap
+khusus. Dengan demikian anda dapat memiliki setup yang berbeda-beda tergantung
+dari function `custom_attach` yang dimasukkan ke setup masing-masing LSP. Fungsi
+`custom_attach` harus di bind ke table-key yang bernama `on_attach`.
+
+*Versi 1*: `init.vim`
+{{{vim
+lua << EOF
+  local function on_attach(client, bufnr)
+    if client.resolved_capabilities.document_formatting then
+      vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting_seq_sync()")
+    end
+  end
+  
+  require('lspconfig').rust_analyzer.setup{
+    on_attach = custom_attach,
+  }
+EOF
+}}}
+*Versi 2*: `init.lua`
+{{{lua
+local function on_attach(client, bufnr)
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting_seq_sync()")
+  end
+end
+
+require('lspconfig').rust_analyzer.setup{
+  on_attach = custom_attach,
+}
+}}}

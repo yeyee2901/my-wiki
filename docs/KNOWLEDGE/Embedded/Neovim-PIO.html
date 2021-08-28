@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Neovim-PIO</title>
+        <title>Neovim and PlatformIO</title>
     </head>
     <body>
 
@@ -72,8 +72,515 @@
 
       <div class='container'>
         
+<div id="Neovim and PlatformIO"><h1 id="Neovim and PlatformIO" class="header"><a href="#Neovim and PlatformIO">Neovim and PlatformIO</a></h1></div>
 <p>
-asdasdasdasd
+<br>
+</p>
+<div id="Neovim and PlatformIO-Perhatian"><h3 id="Perhatian" class="header"><a href="#Neovim and PlatformIO-Perhatian">Perhatian</a></h3></div>
+<p>
+Guide ini tidak ditujukan untuk pemula yang baru belajar Neovim.
+</p>
+
+<p>
+<br>
+</p>
+
+<div id="Neovim and PlatformIO-Requirements"><h3 id="Requirements" class="header"><a href="#Neovim and PlatformIO-Requirements">Requirements</a></h3></div>
+<ul>
+<li>
+Neovim versi 5 : <a href="https://github.com/neovim/neovim/releases/tag/v0.5.0">https://github.com/neovim/neovim/releases/tag/v0.5.0</a>
+
+<li>
+Plugin Neovim:
+
+<ul>
+<li>
+<a href="https://github.com/neovim/nvim-lspconfig">nvim-lspconfig</a>
+
+<li>
+<a href="https://github.com/hrsh7th/nvim-compe">nvim-compe</a> - completion engine
+
+</ul>
+<li>
+Pemahaman dasar mengenai command pada terminal
+
+<li>
+<code>pip</code> python package manager
+
+<li>
+<code>curl</code>
+
+<li>
+<code>build-essential</code>
+
+</ul>
+
+<p>
+<br>
+</p>
+
+<div id="Neovim and PlatformIO-Install PlatformIO Core"><h3 id="Install PlatformIO Core" class="header"><a href="#Neovim and PlatformIO-Install PlatformIO Core">Install PlatformIO Core</a></h3></div>
+<p>
+<span id="Neovim and PlatformIO-Install PlatformIO Core-Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code"></span><strong id="Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code">Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code</strong>.
+</p>
+
+<ol>
+<li>
+<span id="Neovim and PlatformIO-Install PlatformIO Core-Install PlatformIO Core CLI"></span><strong id="Install PlatformIO Core CLI">Install PlatformIO Core CLI</strong>. Kita hanya akan membutuhkan CLI tool PlatformIO 
+    untuk generate file project PlatformIO.
+    Berdasarkan <a href="https://docs.platformio.org/en/latest/core/installation.html#id13">dokumentasi PlatformIO</a>,
+    PlatformIO Core dapat kita install dengan menggunakan <code>pip</code>
+<pre bash>
+$ pip install platformio
+</pre>
+
+<li>
+<span id="Neovim and PlatformIO-Install PlatformIO Core-Install udev rules"></span><strong id="Install udev rules">Install udev rules</strong>. Khusus untuk user Linux, kita harus install <code>udev rules</code>, agar board kita
+    dapat terdeteksi saat ingin <em>upload</em> program. Pendeteksian board ini dilakukan melalui
+    PID/VID yang disertakan pada file <em>udev rules</em>.
+<pre bash>
+$ curl -fsSL https://raw.githubusercontent.com/platformio/platformio-core/master/scripts/99-platformio-udev.rules | sudo tee /etc/udev/rules.d/99-platformio-udev.rules
+</pre>
+    Bash script tersebut akan men-download udev rules dari repository resmi PlatformIO,
+    setelah di download, konten dari file tersebut akan dimasukkan langsung ke direktori
+    <code>/etc/udev/rules.d/99-platformio-udev.rules</code> menggunakan <code>tee</code>. 
+    Mengingat kita butuh akses <em>root</em> untuk
+    ijin penulisan di direktori <code>/etc/</code>, pastikan user anda memiliki akses untuk
+    <em>sudo privilege</em>
+
+<li>
+Selanjutnya, anda bisa cek versi PlatformIO-nya untuk memastikan apakah sudah
+    terinstall dengan benar. Contohnya, pada Linux machine penulis:
+<pre bash>
+$ pio --version
+#OUTPUT: PlatformIO Core, version 5.1.1
+</pre>
+
+</ol>
+    
+<p>
+<br>
+</p>
+
+<div id="Neovim and PlatformIO-Konfigurasi LSP"><h3 id="Konfigurasi LSP" class="header"><a href="#Neovim and PlatformIO-Konfigurasi LSP">Konfigurasi LSP</a></h3></div>
+<ol>
+<li>
+<span id="Neovim and PlatformIO-Konfigurasi LSP-Install language server"></span><strong id="Install language server">Install language server</strong> <code>ccls</code>. CCLS adalah language-server untuk famili bahasa C 
+    (<code>C</code>, <code>C++</code>, <code>Objective-C</code>).
+<pre bash>
+sudo apt install ccls
+</pre>
+    Untuk language-server famili bahasa C, pilihannya ada <code>ccls</code> atau
+    <code>clangd</code>. Namun, khusus untuk integrasi PlatformIO, penulis lebih menyarankan untuk
+    menggunakan <code>ccls</code>.
+
+<li>
+<span id="Neovim and PlatformIO-Konfigurasi LSP-Konfigurasi LSP pada Neovim"></span><strong id="Konfigurasi LSP pada Neovim">Konfigurasi LSP pada Neovim</strong>.
+    Tambahkan baris config ini pada file config Neovim:
+
+<ul>
+<li>
+<code>init.lua</code>
+<pre lua>
+require('lspconfig').ccls.setup()
+</pre>
+
+<li>
+<code>init.vim</code>
+<pre vim>
+lua &lt;&lt; EOF
+  require('lspconfig').ccls.setup()
+EOF
+</pre>
+    <span id="Neovim and PlatformIO-Konfigurasi LSP-Fitur Auto Format On Save"></span><strong id="Fitur Auto Format On Save">Fitur Auto Format On Save</strong>. <code>ccls</code> dapat melakukannya. Tambahkan
+    fungsi <code>custom_attach</code>, dan fungsi ini harus di bind ke table key <code>on_attach</code>
+    pada saat pemanggilan <code>.setup()</code>.
+
+<li>
+<code>init.lua</code>
+<pre lua>
+local custom_attach = function(client,buffnr)
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd("autocmd BufWritePost &lt;buffer&gt; lua vim.lsp.buf.formatting_seq_sync()")
+  end
+end
+
+require('lspconfig').ccls.setup({
+  on_attach = custom_attach,
+})
+</pre>
+
+<li>
+<code>init.vim</code>
+<pre vim>
+lua &lt;&lt; EOF
+  local custom_attach = function(client,buffnr)
+    if client.resolved_capabilities.document_formatting then
+      vim.cmd("autocmd BufWritePost &lt;buffer&gt; lua vim.lsp.buf.formatting_seq_sync()")
+    end
+  end
+
+  require('lspconfig').ccls.setup({
+    on_attach = custom_attach,
+  })
+EOF
+</pre>
+    <span id="Neovim and PlatformIO-Konfigurasi LSP-Fitur Code Diagnostics"></span><strong id="Fitur Code Diagnostics">Fitur Code Diagnostics</strong>. Diagnostic akan memberikan bantuan kita untuk mendeteksi
+    error konyol yang berasal dari <em>typo</em>, <em>syntax error</em>, atau kelalaian sederhana
+    lainnya. <span id="Neovim and PlatformIO-Konfigurasi LSP-Catatan"></span><strong id="Catatan">Catatan</strong>: enable diagnostic harus sebelum pemanggilan <code>.setup()</code> dari
+    <em>language server</em>.
+
+<li>
+<code>init.lua</code>
+<pre lua>
+local diagnostic_setting = {
+  virtual_text = true,
+  underline = true,
+  signs = true,
+}
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    diagnostic_setting
+)
+
+local custom_attach = function(client,buffnr)
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd("autocmd BufWritePost &lt;buffer&gt; lua vim.lsp.buf.formatting_seq_sync()")
+  end
+end
+
+require('lspconfig').ccls.setup({
+  on_attach = custom_attach,
+})
+</pre>
+
+<li>
+<code>init.vim</code>
+<pre vim>
+lua &lt;&lt; EOF
+  local diagnostic_setting = {
+    virtual_text = true,
+    underline = true,
+    signs = true,
+  }
+  
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics,
+      diagnostic_setting
+  )
+  
+  local custom_attach = function(client,buffnr)
+    if client.resolved_capabilities.document_formatting then
+      vim.cmd("autocmd BufWritePost &lt;buffer&gt; lua vim.lsp.buf.formatting_seq_sync()")
+    end
+  end
+
+  require('lspconfig').ccls.setup({
+    on_attach = custom_attach,
+  })
+EOF
+</pre>
+    Silahkan konfigurasi senyamannya. Config parameter:
+
+<ul>
+<li>
+<code>virtual_text</code>: Error message dengan floating text
+
+<li>
+<code>underline</code>: underline pada bagian yang error
+
+<li>
+<code>signs</code>: penanda error pada di samping Line Number (<em>Sign Column</em>)
+
+</ul>
+</ul>
+<li>
+<span id="Neovim and PlatformIO-Konfigurasi LSP-Konfigurasi completion engine"></span><strong id="Konfigurasi completion engine">Konfigurasi completion engine</strong>.
+
+<ul>
+<li>
+<code>init.lua</code>
+<pre lua>
+vim.o.completeopt = "menuone,noselect"
+
+require('compe').setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 60;
+  max_kind_width = 70;
+  max_menu_width = 100;
+  documentation = {
+    border = "rounded",
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 100,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
+
+  source = {
+    path = true;
+    buffer = true;
+    nvim_lsp = true;
+
+  };
+}
+</pre>
+
+<li>
+<code>init.vim</code>
+<pre vim>
+lua &lt;&lt; EOF
+  vim.o.completeopt = "menuone,noselect"
+
+  require('compe').setup {
+    enabled = true;
+    autocomplete = true;
+    debug = false;
+    min_length = 1;
+    preselect = 'enable';
+    throttle_time = 80;
+    source_timeout = 200;
+    incomplete_delay = 400;
+    max_abbr_width = 60;
+    max_kind_width = 70;
+    max_menu_width = 100;
+    documentation = {
+      border = "rounded",
+      winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+      max_width = 100,
+      min_width = 60,
+      max_height = math.floor(vim.o.lines * 0.3),
+      min_height = 1,
+    };
+
+    source = {
+      path = true;
+      buffer = true;
+      nvim_lsp = true;
+    };
+  }
+EOF
+</pre>
+
+</ul>
+</ol>
+    
+<p>
+<br>
+</p>
+
+<div id="Neovim and PlatformIO-Integrasi Dengan Neovim"><h3 id="Integrasi Dengan Neovim" class="header"><a href="#Neovim and PlatformIO-Integrasi Dengan Neovim">Integrasi Dengan Neovim</a></h3></div>
+<p>
+Berdasarkan dokumentasi PlatformIO mengenai <a href="https://docs.platformio.org/en/latest/integration/ide/vim.html?highlight=vim">integrasi dengan Vim</a>:
+</p>
+<ol>
+<li>
+Buat 1 direktori percobaan.
+<pre bash>
+$ mkdir testing ; cd testing
+</pre>
+
+<li>
+Inisialisasi project PlatformIO dengan <code>platformio</code> atau <code>pio</code>, dengan spesifikasi
+    project akan dikembangkan dengan IDE <code>vim</code> (sepertinya yang bikin dokumentasi PlatformIO
+    ini menganggap Vim adalah IDE. But no, Vim/Nvim is just a text editor, 
+    we're super charging it with plugins to make it a comfortable development 
+    environment). Sebagai percobaan, kita akan menggunakan board <code>Arduino UNO</code>
+<pre bash>
+pio init --ide=vim --board=uno
+</pre>
+
+<li>
+Perhatikan file yang di generate oleh <code>platformio</code>:
+<pre bash>
+$ ls -la    
+.rw-rw-r-- 1.3k yeyee2901 28 Aug 22:46 .ccls
+.rw-rw-r--   43 yeyee2901 28 Aug 22:46 .gitignore
+drwxrwxr-x    - yeyee2901 28 Aug 22:46 .pio
+drwxrwxr-x    - yeyee2901 28 Aug 22:46 include
+drwxrwxr-x    - yeyee2901 28 Aug 22:46 lib
+.rw-rw-r--  427 yeyee2901 28 Aug 22:46 platformio.ini
+drwxrwxr-x    - yeyee2901 28 Aug 22:46 src
+drwxrwxr-x    - yeyee2901 28 Aug 22:46 test
+</pre>
+    Dapat terlihat, bahwa secara otomatis <code>platformio</code> membuat file <code>.ccls</code>. 
+    Nah, file inilah yang dibutuhkan oleh <code>ccls</code> agar dapat mengetahui struktur
+    project kita. Tanpa file ini, <code>ccls</code> tidak dapat memberi informasi ke Neovim bagaimana
+    struktur direktori project kita, sehingga Neovim tidak dapat mengetahui 
+    asal muasal fungsi seperti <code>digitalWrite()</code> atau <code>pinMode()</code>, maupun lokasi semua
+    header file yang dibutuhkan saat proses <em>compile</em>.
+    Inilah mengapa penulis lebih menyarankan menggunakan <code>ccls</code> daripada <code>clangd</code>.
+    Berikut isi konten file <code>.ccls</code> yang di generate <code>platformio</code>.
+<pre>
+clang
+
+%c -std=gnu11 -fno-fat-lto-objects -Os -Wall -ffunction-sections -fdata-sections -flto -mmcu=atmega328p
+%cpp -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -Os -Wall -ffunction-sections -fdata-sections -flto -mmcu=atmega328p
+
+-I/home/yeyee2901/Documents/EmbeddedSystem/PlatformIO/testing/include
+-I/home/yeyee2901/Documents/EmbeddedSystem/PlatformIO/testing/src
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/cores/arduino
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/variants/standard
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/HID/src
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/SPI/src
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/Wire/src
+-I/home/yeyee2901/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/7.3.0/include-fixed
+-I/home/yeyee2901/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/7.3.0/include
+-I/home/yeyee2901/.platformio/packages/toolchain-atmelavr/avr/include
+
+-DPLATFORMIO=50101
+-DARDUINO_AVR_UNO
+-DF_CPU=16000000L
+-DARDUINO_ARCH_AVR
+-DARDUINO=10808
+-D__AVR_ATmega328P__
+</pre>
+    Berhubung saya generate project di direktori <code>~/Documents/EmbeddedSystem/PlatformIO</code>,
+    maka sudah sewajarnya ada include flag berikut.
+<pre>
+-I/home/yeyee2901/Documents/EmbeddedSystem/PlatformIO/testing/include
+-I/home/yeyee2901/Documents/EmbeddedSystem/PlatformIO/testing/src
+</pre>
+    Deretan include flag selanjutnya, adalah untuk semua header file yang dibutuhkan
+    untuk proses development board <code>Arduino UNO</code>. Dari sinilah <code>ccls</code> bisa mengetahui
+    asal muasal fungsi dasar pada platform Arduino seperti <code>digitalWrite()</code>.
+    Enak kan sudah di generate otomatis oleh <code>platformio</code>, tidak perlu cari direktorinya
+    satu persatu &amp; generate <em>compilation database</em> seperti <code>compile_commands.json</code> 
+    secara manual dengan <code>cmake</code> :)
+<pre>
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/cores/arduino
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/variants/standard
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src
+-I/home/yeyee2901/.platformio/packages/framework-arduino-avr/libraries/HID/src
+.......dst
+</pre>
+    Deretan define flag di paling bawah, adalah untuk spesifikasi khusus ke <code>platformio</code>,
+    pengaturan define flag ini dapat kita atur di file <code>platformio.ini</code>, yang akan
+    dibahas selanjutnya.
+    Untuk deretan compile flag diatas (<code>%c</code> &amp; <code>%cpp</code>), secara garis besar yang penting adalah:
+
+<ul>
+<li>
+<code>-std=gnu11</code> &amp; <code>std=gnu++11</code> : Gunakan standar C11 dan C++11
+
+<li>
+<code>-Os</code> : Optimize Size, ini diperlukan karena memang resource mikrokontroler itu tidak banyak
+
+<li>
+<code>-Wall</code> : report semua warning pada saat compile
+
+<li>
+<code>-mmcu=atmega328p</code> : ATMega328P merupakan mikrokontroler yang digunakan pada board Arduino UNO
+
+</ul>
+<li>
+Oke, selanjutnya kita akan membuat sebuah <code>Makefile</code> untuk automasi proses build kita.
+    Oleh karena itu, buat file dengan nama <code>Makefile</code> di <em>root project directory</em> 
+    dengan isinya:
+<pre make>
+all:
+	pio -f -c vim run
+
+clean:
+	pio -f -c vim run -t clean
+
+upload:
+	pio -f -c vim run -t upload
+
+uploadfs:
+	pio -f -c vim run -t uploadfs
+
+program:
+	pio -f -c vim run -t program
+
+update:
+	pio -f -c vim run -t update
+</pre>
+    Nantinya, kita tinggal menjalankan <code>make</code> untuk salah satu dari target tersebut.
+    Contohnya:
+
+<ul>
+<li>
+Untuk build:
+<pre bash>
+make all 
+
+# Atau bisa cukup panggil make saja,
+# karena secara default, make akan mencari target paling
+# pertama yang ditemui di Makefile
+make
+</pre>
+
+<li>
+Untuk upload program:
+<pre bash>
+make upload    
+</pre>
+
+</ul>
+<li>
+Selanjutnya, mari kita mencoba <em>coding</em> program sederhana untuk blink program.<br>
+    <span id="Neovim and PlatformIO-Integrasi Dengan Neovim-file"></span><strong id="file">file</strong>: <code>src/main.cpp</code>
+<pre cpp>
+// File ini WAJIB di include kan, karena memuat function definition
+// untuk function-function utama yang digunakan di PlatformIO
+#include &lt;Arduino.h&gt;
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(3000);
+
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(3000);
+}
+</pre>
+    <span id="Neovim and PlatformIO-Integrasi Dengan Neovim-Uji autocomplete"></span><strong id="Uji autocomplete">Uji autocomplete</strong>. Hapus baris <code>#include &lt;Arduino.h&gt;</code>, dan ketikkan
+    secara MANUAL. Apabila konfigurasi kita sudah benar, maka di completion list akan
+    muncul salah satu kandidatnya adalah <code>Arduino.h</code>. Seperti gambar berikut.<br>
+    <img src="https://i.ibb.co/x22hdBQ/Screenshot-from-2021-08-28-23-37-37.png" /><br>
+    Kita dapat menavigasi pilihan completion dengan menekan <code>CTRL + n</code> atau <code>CTRL + p</code>,
+    agar lebih mudah mengingatnya, maka anggap saja <code>n = next</code>, <code>p = previous</code>.<br>
+    <span id="Neovim and PlatformIO-Integrasi Dengan Neovim-Uji diagnostic"></span><strong id="Uji diagnostic">Uji diagnostic</strong>. Buat error sekonyol-konyolnya. Contohnya saja akan coba mengganti
+    <code>digitalWrite</code> menjadi <code>digiWrite</code>. Jika config kita benar, 
+    akan muncul banyak error message yang mengatakan bahwa tidak ada fungsi bernama
+    <code>digiWrite</code>.
+    <img src="https://i.ibb.co/GvnsttY/Screenshot-from-2021-08-28-23-47-13.png" /><br>
+
+</ol>
+    
+<p>
+Jika semua uji coba tersebut lulus, selamat! Neovim sudah dapat bekerja sama
+dengan PlatformIO!
+</p>
+
+<p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
+</p>
+
+
+
+<p>
+<br>
+</p>
+<div id="Neovim and PlatformIO-TODO Tambahan: Menambahkan Library External"><h3 id="TODO Tambahan: Menambahkan Library External" class="header"><a href="#Neovim and PlatformIO-TODO Tambahan: Menambahkan Library External"><span class="todo">TODO</span> Tambahan: Menambahkan Library External</a></h3></div>
+
+<p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
 </p>
 
       </div>

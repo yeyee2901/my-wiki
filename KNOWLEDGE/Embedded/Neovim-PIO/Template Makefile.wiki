@@ -1,0 +1,19 @@
+{{{make
+all:
+	pio -f -c vim run
+
+clean:
+	pio -f -c vim run -t clean
+
+upload:
+	pio -f -c vim run -t upload
+
+uploadfs:
+	pio -f -c vim run -t uploadfs
+
+program:
+	pio -f -c vim run -t program
+  
+update:
+	pio init --ide=vim
+}}}

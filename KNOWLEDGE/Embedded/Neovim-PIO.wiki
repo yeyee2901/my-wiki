@@ -1,12 +1,19 @@
 %title Neovim and PlatformIO
 = Neovim and PlatformIO =
+* [[#Requirements|Requirements]]
+* [[#Install PlatformIO Core|Install PlatformIO Core]]
+* [[#Konfigurasi LSP|Konfigurasi LSP]]
+* [[#Integrasi Dengan Neovim|Integrasi dengan Neovim]]
+* [[#Tambahan: Menambahkan Library External|Tambahan: Menambahkan Library External]]
 <br>
+
 === Perhatian ===
 Guide ini tidak ditujukan untuk pemula yang baru belajar Neovim.
 
 <br>
 
 === Requirements ===
+[[#Neovim and PlatformIO|Go to top]]
 * Neovim versi 5 : [[https://github.com/neovim/neovim/releases/tag/v0.5.0]]
 * Plugin Neovim:
   * [[https://github.com/neovim/nvim-lspconfig|nvim-lspconfig]]
@@ -19,6 +26,8 @@ Guide ini tidak ditujukan untuk pemula yang baru belajar Neovim.
 <br>
 
 === Install PlatformIO Core ===
+[[#Neovim and PlatformIO|Go to top]]
+
 *Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code*.
 
 1. *Install PlatformIO Core CLI*. Kita hanya akan membutuhkan CLI tool PlatformIO 
@@ -50,6 +59,7 @@ $ pio --version
 <br>
 
 === Konfigurasi LSP ===
+[[#Neovim and PlatformIO|Go to top]]
 1. *Install language server* `ccls`. CCLS adalah language-server untuk famili bahasa C 
     (`C`, `C++`, `Objective-C`).
     {{{bash
@@ -227,6 +237,8 @@ EOF
 <br>
 
 === Integrasi Dengan Neovim ===
+[[#Neovim and PlatformIO|Go to top]]
+
 Berdasarkan dokumentasi PlatformIO mengenai [[https://docs.platformio.org/en/latest/integration/ide/vim.html?highlight=vim|integrasi dengan Vim]]:
 1. Buat 1 direktori percobaan.
     {{{bash
@@ -331,9 +343,9 @@ uploadfs:
 
 program:
 	pio -f -c vim run -t program
-
+  
 update:
-	pio -f -c vim run -t update
+	pio init --ide=vim
     }}}
     Nantinya, kita tinggal menjalankan `make` untuk salah satu dari target tersebut.
     Contohnya:
@@ -385,11 +397,10 @@ void loop() {
 Jika semua uji coba tersebut lulus, selamat! Neovim sudah dapat bekerja sama
 dengan PlatformIO!
 
-[[#Neovim and PlatformIO|Go to top]]
-
 
 
 <br>
 === TODO Tambahan: Menambahkan Library External ===
+[[#Neovim and PlatformIO|Go to top]]
 
 [[#Neovim and PlatformIO|Go to top]]

@@ -19,6 +19,7 @@
       <!-- Header -->
       <div class='bg-dark container-fluid pt-2 pb-2'>
         <h1 class='text-white'>
+          <img src="https://avatars.githubusercontent.com/u/55247343?v=4" style="width: 50px; height: 50px;" alt=""/>
           <a href='../../index.html' class='text-white' style='text-decoration: none;'>Y2 - Wiki</a>
         </h1>
       </div>
@@ -73,9 +74,27 @@
       <div class='container'>
         
 <div id="Neovim and PlatformIO"><h1 id="Neovim and PlatformIO" class="header"><a href="#Neovim and PlatformIO">Neovim and PlatformIO</a></h1></div>
+<ul>
+<li>
+<a href="Neovim-PIO.html#Requirements">Requirements</a>
+
+<li>
+<a href="Neovim-PIO.html#Install PlatformIO Core">Install PlatformIO Core</a>
+
+<li>
+<a href="Neovim-PIO.html#Konfigurasi LSP">Konfigurasi LSP</a>
+
+<li>
+<a href="Neovim-PIO.html#Integrasi Dengan Neovim">Integrasi dengan Neovim</a>
+
+<li>
+<a href="Neovim-PIO.html#Tambahan: Menambahkan Library External">Tambahan: Menambahkan Library External</a>
+
+</ul>
 <p>
 <br>
 </p>
+
 <div id="Neovim and PlatformIO-Perhatian"><h3 id="Perhatian" class="header"><a href="#Neovim and PlatformIO-Perhatian">Perhatian</a></h3></div>
 <p>
 Guide ini tidak ditujukan untuk pemula yang baru belajar Neovim.
@@ -86,6 +105,9 @@ Guide ini tidak ditujukan untuk pemula yang baru belajar Neovim.
 </p>
 
 <div id="Neovim and PlatformIO-Requirements"><h3 id="Requirements" class="header"><a href="#Neovim and PlatformIO-Requirements">Requirements</a></h3></div>
+<p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
+</p>
 <ul>
 <li>
 Neovim versi 5 : <a href="https://github.com/neovim/neovim/releases/tag/v0.5.0">https://github.com/neovim/neovim/releases/tag/v0.5.0</a>
@@ -120,6 +142,10 @@ Pemahaman dasar mengenai command pada terminal
 </p>
 
 <div id="Neovim and PlatformIO-Install PlatformIO Core"><h3 id="Install PlatformIO Core" class="header"><a href="#Neovim and PlatformIO-Install PlatformIO Core">Install PlatformIO Core</a></h3></div>
+<p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
+</p>
+
 <p>
 <span id="Neovim and PlatformIO-Install PlatformIO Core-Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code"></span><strong id="Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code">Lewati langkah ini jika sudah pernah install PlatformIO extension di Visual Studio Code</strong>.
 </p>
@@ -163,6 +189,9 @@ $ pio --version
 </p>
 
 <div id="Neovim and PlatformIO-Konfigurasi LSP"><h3 id="Konfigurasi LSP" class="header"><a href="#Neovim and PlatformIO-Konfigurasi LSP">Konfigurasi LSP</a></h3></div>
+<p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
+</p>
 <ol>
 <li>
 <span id="Neovim and PlatformIO-Konfigurasi LSP-Install language server"></span><strong id="Install language server">Install language server</strong> <code>ccls</code>. CCLS adalah language-server untuk famili bahasa C 
@@ -379,6 +408,10 @@ EOF
 
 <div id="Neovim and PlatformIO-Integrasi Dengan Neovim"><h3 id="Integrasi Dengan Neovim" class="header"><a href="#Neovim and PlatformIO-Integrasi Dengan Neovim">Integrasi Dengan Neovim</a></h3></div>
 <p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
+</p>
+
+<p>
 Berdasarkan dokumentasi PlatformIO mengenai <a href="https://docs.platformio.org/en/latest/integration/ide/vim.html?highlight=vim">integrasi dengan Vim</a>:
 </p>
 <ol>
@@ -502,9 +535,9 @@ uploadfs:
 
 program:
 	pio -f -c vim run -t program
-
+  
 update:
-	pio -f -c vim run -t update
+	pio init --ide=vim
 </pre>
     Nantinya, kita tinggal menjalankan <code>make</code> untuk salah satu dari target tersebut.
     Contohnya:
@@ -568,16 +601,15 @@ Jika semua uji coba tersebut lulus, selamat! Neovim sudah dapat bekerja sama
 dengan PlatformIO!
 </p>
 
-<p>
-<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
-</p>
-
 
 
 <p>
 <br>
 </p>
 <div id="Neovim and PlatformIO-TODO Tambahan: Menambahkan Library External"><h3 id="TODO Tambahan: Menambahkan Library External" class="header"><a href="#Neovim and PlatformIO-TODO Tambahan: Menambahkan Library External"><span class="todo">TODO</span> Tambahan: Menambahkan Library External</a></h3></div>
+<p>
+<a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>
+</p>
 
 <p>
 <a href="Neovim-PIO.html#Neovim and PlatformIO">Go to top</a>

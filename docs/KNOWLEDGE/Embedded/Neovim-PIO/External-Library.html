@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="https://avatars.githubusercontent.com/u/55247343?v=4">
+        <!-- Enable syntax highlighting -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css" />
+        <link rel="Stylesheet" type="text/css" href="../../../style.css">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Neovim and PlatformIO</title>
+    </head>
+    <body>
+
+      <!-- Header -->
+      <div class='bg-dark container-fluid pt-2 pb-2'>
+        <h1 class='text-white'>
+          <img src="https://avatars.githubusercontent.com/u/55247343?v=4" style="width: 50px; height: 50px;" alt=""/>
+          <a href='../../../index.html' class='text-white' style='text-decoration: none;'>Y2 - Wiki</a>
+        </h1>
+      </div>
+
+      <!-- Navbar -->
+      <div class='mt-0 mb-3 ml-0 mr-0 container-fluid bg-light'>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class='navbar-nav'>
+
+            <!-- Wiki Navigation -->
+            <a class='navbar-brand' href='../../../index.html'>
+              Home
+            </a>
+
+            <!-- Social Media -->
+            <li class="nav-item dropdown">
+              <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Find Me On: 
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <!-- Github -->
+                <li>
+                  <a class="ml-2 nav-link active" href="https://github.com/yeyee2901/" target="_blank">
+                    <img src="http://pngimg.com/uploads/github/github_PNG40.png" 
+                    width="30" 
+                    height="30" 
+                    class="d-inline-block align-center" 
+                    alt=""
+                    >
+                      Github
+                  </a>
+                </li>
+                <li>
+                  <a class="ml-2 nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" 
+                    width="30" 
+                    height="30" 
+                    class="d-inline-block align-center" 
+                    alt=""
+                    >
+                      Instagram
+                  </a>
+                </li>
+                
+              </ul>
+            </li>
+
+          </div>
+        </nav>
+      </div>
+
+      <div class='container'>
+        
+
+<div id="Menambahkan Library Eksternal"><h1 id="Menambahkan Library Eksternal" class="header"><a href="#Menambahkan Library Eksternal">Menambahkan Library Eksternal</a></h1></div>
+<p>
+Dalam pengembangan dengan PlatformIO, ada 2 cara untuk menambahkan
+<em>dependency</em> library eksternal.
+</p>
+<ol>
+<li>
+<span id="Menambahkan Library Eksternal-Melalui"></span><strong id="Melalui">Melalui</strong> <code>platformio-core</code> <span id="Menambahkan Library Eksternal-pada terminal"></span><strong id="pada terminal">pada terminal</strong>
+<pre bash>
+$ pio lib install "&lt;author&gt;/&lt;library_name&gt;"
+</pre>
+    Secara default, jika kita tidak menyertakan versi library yang
+    ingin digunakan, yang digunakan adalah <span id="Menambahkan Library Eksternal-LATEST"></span><strong id="LATEST">LATEST</strong>.
+    Jika ingin men-target versi library yang spesifik,
+    Ada 4 pilihan penggunaan <em>library version</em> yang dapat digunakan:
+<pre bash>
+# latest (omit the version specification)
+$ pio lib install "&lt;author&gt;/&lt;library_name&gt;"
+
+# exact version
+$ pio lib install "&lt;author&gt;/&lt;library_name&gt;@&lt;version&gt;"
+
+# Accept new functionality in Backwards compatible manner 
+$ pio lib install "&lt;author&gt;/&lt;library_name&gt;@^&lt;version&gt;"
+
+# any version with the same major and minor versions, 
+# and an equal or greater patch version
+$ pio lib install "&lt;author&gt;/&lt;library_name&gt;@~&lt;version&gt;"
+</pre>
+    Contohnya, penulis sering menggunakan library <code>enjoyneering/LiquidCrystal_I2C</code>,
+    yaitu library LCD yang menggunakan <em>controller</em> HD44780 dengan
+    PCF IO expander module, atau biasa kita sebut "library LCD I2C"🤣.
+    Maka biasanya saya bisa install library tersebut dengan cara:
+<pre bash>
+# latest (omit the version specification)
+$ pio lib install "enjoyneering/LiquidCrystal_I2C"
+
+# exact version
+$ pio lib install "enjoyneering/LiquidCrystal_I2C@1.2.4"
+
+# Accept new functionality in Backwards compatible manner 
+$ pio lib install "enjoyneering/LiquidCrystal_I2C@^1.2.4"
+
+# any version with the same major and minor versions, 
+# and an equal or greater patch version
+$ pio lib install "enjoyneering/LiquidCrystal_I2C@~1.2.4"
+</pre>
+
+<li>
+<span id="Menambahkan Library Eksternal-Melalui file config project"></span><strong id="Melalui file config project">Melalui file config project</strong> <code>platformio.ini</code>
+    Untuk menyertakan dependency melalui file <code>platformio.ini</code>, maka
+    kita bisa menambahkannya dengan mengisikannya ke option <code>lib_deps</code>.
+<pre>
+lib_deps = 
+  &lt;library_1&gt;
+  &lt;library_2&gt;
+</pre>
+    Syarat penulisan: <span id="Menambahkan Library Eksternal-setiap dependency library dimulai di <em>newline</em>, dengan indentasi minimal 2 spasi."></span><strong id="setiap dependency library dimulai di <em>newline</em>, dengan indentasi minimal 2 spasi.">setiap dependency library dimulai di <em>newline</em>, dengan indentasi minimal 2 spasi.</strong>
+    (mirip seperti penulisan Makefile).<br>
+    Biasanya, karena saya bekerja dengan banyak board berbeda sekaligus,
+    dependency untuk semua board tersebut, terutama jika menggunakan
+    komponen yang sama persis, biasanya saya buat <code>common environment</code>.
+    Sehingga semua environment kerja lain bisa mengambil 
+    option dari <code>common environment</code> jika diperlukan. 
+    Sebenarnya hal ini lebih agar tidak terjadi penulisan yang berulang.
+    konsep ini juga bisa digunakan untuk option lain, tidak hanya <code>lib_deps</code>.
+<pre>
+[env]
+framework = arduino
+lib_deps = 
+    &lt;library_1&gt;
+    &lt;library_2&gt;
+
+[env:uno]
+platform = atmelavr
+board = uno
+framework = ${env.framework}
+board_build.f_cpu = 16000000L
+lib_deps = 
+    ${env.lib_deps}
+
+[env:nodemcuv2]
+platform = espressif8266
+board = nodemcuv2
+framework = ${env.framework}
+lib_deps = 
+    ${env.lib_deps}
+
+</pre>
+    Contoh real jika menggunakan <code>enjoyneering/LiquidCrystal_I2C</code>
+    <span id="Menambahkan Library Eksternal-Perhatikan penulisan dependency di"></span><strong id="Perhatikan penulisan dependency di">Perhatikan penulisan dependency di</strong> <code>platformio.ini</code>
+    <span id="Menambahkan Library Eksternal-tidak menggunakan tanda kutip seperti cara 1"></span><strong id="tidak menggunakan tanda kutip seperti cara 1">tidak menggunakan tanda kutip seperti cara 1</strong>
+<pre>
+[env]
+framework = arduino
+lib_deps = 
+  enjoyneering/LiquidCrystal
+  enjoyneering/LiquidCrystal@1.2.4
+  enjoyneering/LiquidCrystal@^1.2.4
+  enjoyneering/LiquidCrystal@~1.2.4
+
+[env:uno]
+platform = atmelavr
+board = uno
+framework = ${env.framework}
+board_build.f_cpu = 16000000L
+lib_deps = 
+    ${env.lib_deps}
+
+[env:nodemcuv2]
+platform = espressif8266
+board = nodemcuv2
+framework = ${env.framework}
+lib_deps = 
+    ${env.lib_deps}
+</pre>
+
+</ol>
+<p>
+<br>
+</p>
+<div id="Update File .ccls"><h1 id="Update File .ccls" class="header"><a href="#Update File .ccls">Update File .ccls</a></h1></div>
+<p>
+Setelah kita menambahkan library external yang kita perlukan, kita
+harus <em>update</em> file <code>.ccls</code> agar LSP kita dapat bekerja dengan benar kembali.
+Jika tidak kita update, maka sudah jelas akan muncul <code>include error</code>, karena
+<code>ccls</code> tidak mengetahui bahwa ada path baru yang harus dimasukkan dalam daftar include.
+Menariknya, hal ini dilakukan dengan:
+</p>
+<pre bash>
+pio init --ide=vim
+</pre>
+<p>
+Nah, hal ini <span id="Update File .ccls-TIDAK ADA DI DOKUMENTASI"></span><strong id="TIDAK ADA DI DOKUMENTASI">TIDAK ADA DI DOKUMENTASI</strong> PlatformIO, penulis sudah mengubrak-abrik
+semua bagian dokumentasinya mengenai <code>platformio-core</code> (CLI), dan tidak menemukan hal terkait.
+Melakukan <code>init</code> pada project yang sudah ada, tidak akan membuat ulang / mengosongkan
+project-nya, melainkan hanya melakukan update berdasarkan apa yang berubah di 
+file <code>platformio.ini</code>.
+Apabila kita mencoba melihat kembali isi <code>.ccls</code> setelah melakukan <code>pio init</code> lagi,
+maka kita akan melihat ada entry baru di bagian flag <code>-I</code>.
+</p>
+<pre>
+-I&lt;PATH_TO_YOUR_PROJECT&gt;/.pio/libdeps/uno/LiquidCrystal_I2C/src
+</pre>
+<p>
+Nah, jika sudah terdapat entry tersebut, maka ketika kita coba include
+library baru kita ke <em>source code</em>, akan ada entry autocomplete-nya.
+<img src="https://i.ibb.co/1ZkrTZ9/Screenshot-from-2021-08-30-14-27-10.png" /><br>
+</p>
+
+<p>
+<br>
+</p>
+
+<div id="NICEEEEE"><h1 id="NICEEEEE" class="header"><a href="#NICEEEEE">NICEEEEE</a></h1></div>
+<p>
+Dengan membaca artikel ini, semoga pembaca menjadi paham bagaimana workflow untuk 
+menambahkan dependency eksternal pada saat development di PlatformIO menggunakan Vim/Neovim!
+Bila dirangkum <em>step-by-step</em> nya adalah sebagai berikut:
+</p>
+<ol>
+<li>
+Cari library yang dibutuhkan melalui <a href="https://platformio.org/lib">PlatformIO library browser</a>
+
+<li>
+Tambahkan <em>dependency</em> melalui:
+
+<ul>
+<li>
+<code>pio lib install</code> <span id="NICEEEEE-ATAU"></span><strong id="ATAU">ATAU</strong>
+
+<li>
+Menyertakan <em>dependency</em> melalui file <code>platformio.ini</code>
+
+</ul>
+<li>
+Update file <code>.ccls</code> dengan <code>pio init --ide=vim</code>
+
+</ol>
+
+<p>
+<br>
+<br>
+</p>
+<div id="NICEEEEE-Catatan Tambahan"><h2 id="Catatan Tambahan" class="header"><a href="#NICEEEEE-Catatan Tambahan">Catatan Tambahan</a></h2></div>
+<p>
+Oh iya, perintah <code>pio lib install</code> bersifat <span id="NICEEEEE-Catatan Tambahan-LOKAL"></span><strong id="LOKAL">LOKAL</strong> terhadap
+project, jadi pastikan pembaca berada di <code>root-directory</code> dari project ya. 
+<br>
+Pada versi awal PlatformIO, mereka menyediakan opsi untuk install library secara global".
+Namun, banyak kritik yang menyebutkan bahwa "<span id="NICEEEEE-Catatan Tambahan-justru penggunaan PlatformIO itu dimaksudkan agar kita tidak seenaknya install library secara global, dan memudahkan kita melakukan memanajemen dependency dari tiap-tiap project"></span><strong id="justru penggunaan PlatformIO itu dimaksudkan agar kita tidak seenaknya install library secara global, dan memudahkan kita melakukan memanajemen dependency dari tiap-tiap project">justru penggunaan PlatformIO itu dimaksudkan agar kita tidak seenaknya install library secara global, dan memudahkan kita melakukan memanajemen dependency dari tiap-tiap project</strong>".<br>
+</p>
+
+<p>
+Instalasi library secara global memiliki priority yang lebih tinggi dibandingkan
+library dependency lokal dari project yang bersangkutan, oleh karena itu
+walaupun kita menspesifikasikan versi <code>1.2.4</code> pada <code>platformio.ini</code>, jika terdapat
+registry library global dengan nama sama, maka versi yang digunakan adalah yang global.
+Untunglah fitur ini sudah di remove, jadi tidak ada kebingungan lagi.
+<br>
+</p>
+
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+      <!-- include highlight.js -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+      <script type="text/javascript">
+          document.querySelectorAll('pre').forEach(block => hljs.highlightBlock(block));
+      </script>
+    </body>
+</html>

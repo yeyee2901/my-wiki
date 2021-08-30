@@ -4,7 +4,6 @@
 * [[#Install PlatformIO Core|Install PlatformIO Core]]
 * [[#Konfigurasi LSP|Konfigurasi LSP]]
 * [[#Integrasi Dengan Neovim|Integrasi dengan Neovim]]
-* [[#Tambahan: Menambahkan Library External|Tambahan: Menambahkan Library External]]
 <br>
 
 === Perhatian ===
@@ -400,7 +399,6 @@ dengan PlatformIO!
 
 
 <br>
-=== TODO Tambahan: Menambahkan Library External ===
 [[#Neovim and PlatformIO|Go to top]]
 
 [[#Neovim and PlatformIO|Go to top]]

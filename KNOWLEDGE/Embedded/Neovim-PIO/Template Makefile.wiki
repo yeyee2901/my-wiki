@@ -1,3 +1,5 @@
+%title Neovim and PIO
+= Template Makefile =
 {{{make
 all:
 	pio -f -c vim run

@@ -1,0 +1,163 @@
+%title Neovim and PlatformIO
+
+= Menambahkan Library Eksternal =
+Dalam pengembangan dengan PlatformIO, ada 2 cara untuk menambahkan
+_dependency_ library eksternal.
+1. *Melalui* `platformio-core` *pada terminal*
+    {{{bash
+$ pio lib install "<author>/<library_name>"
+    }}}
+    Secara default, jika kita tidak menyertakan versi library yang
+    ingin digunakan, yang digunakan adalah *LATEST*.
+    Jika ingin men-target versi library yang spesifik,
+    Ada 4 pilihan penggunaan _library version_ yang dapat digunakan:
+    {{{bash
+# latest (omit the version specification)
+$ pio lib install "<author>/<library_name>"
+
+# exact version
+$ pio lib install "<author>/<library_name>@<version>"
+
+# Accept new functionality in Backwards compatible manner 
+$ pio lib install "<author>/<library_name>@^<version>"
+
+# any version with the same major and minor versions, 
+# and an equal or greater patch version
+$ pio lib install "<author>/<library_name>@~<version>"
+    }}}
+    Contohnya, penulis sering menggunakan library `enjoyneering/LiquidCrystal_I2C`,
+    yaitu library LCD yang menggunakan _controller_ HD44780 dengan
+    PCF IO expander module, atau biasa kita sebut "library LCD I2C"🤣.
+    Maka biasanya saya bisa install library tersebut dengan cara:
+    {{{bash
+# latest (omit the version specification)
+$ pio lib install "enjoyneering/LiquidCrystal_I2C"
+
+# exact version
+$ pio lib install "enjoyneering/LiquidCrystal_I2C@1.2.4"
+
+# Accept new functionality in Backwards compatible manner 
+$ pio lib install "enjoyneering/LiquidCrystal_I2C@^1.2.4"
+
+# any version with the same major and minor versions, 
+# and an equal or greater patch version
+$ pio lib install "enjoyneering/LiquidCrystal_I2C@~1.2.4"
+    }}}
+2. *Melalui file config project* `platformio.ini`
+    Untuk menyertakan dependency melalui file `platformio.ini`, maka
+    kita bisa menambahkannya dengan mengisikannya ke option `lib_deps`.
+    {{{
+lib_deps = 
+  <library_1>
+  <library_2>
+    }}}
+    Syarat penulisan: *setiap dependency library dimulai di _newline_, dengan indentasi minimal 2 spasi.*
+    (mirip seperti penulisan Makefile).<br>
+    Biasanya, karena saya bekerja dengan banyak board berbeda sekaligus,
+    dependency untuk semua board tersebut, terutama jika menggunakan
+    komponen yang sama persis, biasanya saya buat `common environment`.
+    Sehingga semua environment kerja lain bisa mengambil 
+    option dari `common environment` jika diperlukan. 
+    Sebenarnya hal ini lebih agar tidak terjadi penulisan yang berulang.
+    konsep ini juga bisa digunakan untuk option lain, tidak hanya `lib_deps`.
+    {{{
+[env]
+framework = arduino
+lib_deps = 
+    <library_1>
+    <library_2>
+
+[env:uno]
+platform = atmelavr
+board = uno
+framework = ${env.framework}
+board_build.f_cpu = 16000000L
+lib_deps = 
+    ${env.lib_deps}
+
+[env:nodemcuv2]
+platform = espressif8266
+board = nodemcuv2
+framework = ${env.framework}
+lib_deps = 
+    ${env.lib_deps}
+
+    }}}
+    Contoh real jika menggunakan `enjoyneering/LiquidCrystal_I2C`
+    *Perhatikan penulisan dependency di* `platformio.ini`
+    *tidak menggunakan tanda kutip seperti cara 1*
+    {{{
+[env]
+framework = arduino
+lib_deps = 
+  enjoyneering/LiquidCrystal
+  enjoyneering/LiquidCrystal@1.2.4
+  enjoyneering/LiquidCrystal@^1.2.4
+  enjoyneering/LiquidCrystal@~1.2.4
+
+[env:uno]
+platform = atmelavr
+board = uno
+framework = ${env.framework}
+board_build.f_cpu = 16000000L
+lib_deps = 
+    ${env.lib_deps}
+
+[env:nodemcuv2]
+platform = espressif8266
+board = nodemcuv2
+framework = ${env.framework}
+lib_deps = 
+    ${env.lib_deps}
+    }}}
+<br>
+= Update File .ccls = 
+Setelah kita menambahkan library external yang kita perlukan, kita
+harus _update_ file `.ccls` agar LSP kita dapat bekerja dengan benar kembali.
+Jika tidak kita update, maka sudah jelas akan muncul `include error`, karena
+`ccls` tidak mengetahui bahwa ada path baru yang harus dimasukkan dalam daftar include.
+Menariknya, hal ini dilakukan dengan:
+{{{bash
+pio init --ide=vim
+}}}
+Nah, hal ini *TIDAK ADA DI DOKUMENTASI* PlatformIO, penulis sudah mengubrak-abrik
+semua bagian dokumentasinya mengenai `platformio-core` (CLI), dan tidak menemukan hal terkait.
+Melakukan `init` pada project yang sudah ada, tidak akan membuat ulang / mengosongkan
+project-nya, melainkan hanya melakukan update berdasarkan apa yang berubah di 
+file `platformio.ini`.
+Apabila kita mencoba melihat kembali isi `.ccls` setelah melakukan `pio init` lagi,
+maka kita akan melihat ada entry baru di bagian flag `-I`.
+{{{
+-I<PATH_TO_YOUR_PROJECT>/.pio/libdeps/uno/LiquidCrystal_I2C/src
+}}}
+Nah, jika sudah terdapat entry tersebut, maka ketika kita coba include
+library baru kita ke _source code_, akan ada entry autocomplete-nya.
+{{https://i.ibb.co/1ZkrTZ9/Screenshot-from-2021-08-30-14-27-10.png}}<br>
+
+<br>
+
+= NICEEEEE =
+Dengan membaca artikel ini, semoga pembaca menjadi paham bagaimana workflow untuk 
+menambahkan dependency eksternal pada saat development di PlatformIO menggunakan Vim/Neovim!
+Bila dirangkum _step-by-step_ nya adalah sebagai berikut:
+1. Cari library yang dibutuhkan melalui [[https://platformio.org/lib|PlatformIO library browser]]
+2. Tambahkan _dependency_ melalui:
+  * `pio lib install` *ATAU*
+  * Menyertakan _dependency_ melalui file `platformio.ini`
+3. Update file `.ccls` dengan `pio init --ide=vim`
+
+<br>
+<br>
+== Catatan Tambahan ==
+Oh iya, perintah `pio lib install` bersifat *LOKAL* terhadap
+project, jadi pastikan pembaca berada di `root-directory` dari project ya. 
+<br>
+Pada versi awal PlatformIO, mereka menyediakan opsi untuk install library secara global".
+Namun, banyak kritik yang menyebutkan bahwa "*justru penggunaan PlatformIO itu dimaksudkan agar kita tidak seenaknya install library secara global, dan memudahkan kita melakukan memanajemen dependency dari tiap-tiap project*".<br>
+
+Instalasi library secara global memiliki priority yang lebih tinggi dibandingkan
+library dependency lokal dari project yang bersangkutan, oleh karena itu
+walaupun kita menspesifikasikan versi `1.2.4` pada `platformio.ini`, jika terdapat
+registry library global dengan nama sama, maka versi yang digunakan adalah yang global.
+Untunglah fitur ini sudah di remove, jadi tidak ada kebingungan lagi.
+<br>

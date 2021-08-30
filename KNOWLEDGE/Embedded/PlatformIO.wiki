@@ -5,6 +5,7 @@
 
 * [[Neovim-PIO|Neovim 0.5]]
   * [[Neovim-PIO/Template Makefile|Template Makefile]]
+  * [[Neovim-PIO/External-Library|Menambahkan Library External]]
 
 <br><br>
 

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="https://avatars.githubusercontent.com/u/55247343?v=4">
+        <!-- Enable syntax highlighting -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css" />
+        <link rel="Stylesheet" type="text/css" href="../../style.css">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>npm-install</title>
+    </head>
+    <body>
+
+      <!-- Header -->
+      <div class='bg-dark container-fluid pt-2 pb-2'>
+        <h1 class='text-white'>
+          <img src="https://avatars.githubusercontent.com/u/55247343?v=4" style="width: 50px; height: 50px;" alt=""/>
+          <a href='../../index.html' class='text-white' style='text-decoration: none;'>Y2 - Wiki</a>
+        </h1>
+      </div>
+
+      <!-- Navbar -->
+      <div class='mt-0 mb-3 ml-0 mr-0 container-fluid bg-light'>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class='navbar-nav'>
+
+            <!-- Wiki Navigation -->
+            <a class='navbar-brand' href='../../index.html'>
+              Home
+            </a>
+
+            <!-- Social Media -->
+            <li class="nav-item dropdown">
+              <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Find Me On: 
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <!-- Github -->
+                <li>
+                  <a class="ml-2 nav-link active" href="https://github.com/yeyee2901/" target="_blank">
+                    <img src="http://pngimg.com/uploads/github/github_PNG40.png" 
+                    width="30" 
+                    height="30" 
+                    class="d-inline-block align-center" 
+                    alt=""
+                    >
+                      Github
+                  </a>
+                </li>
+                <li>
+                  <a class="ml-2 nav-link active" href="https://www.instagram.com/yeyee32/" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" 
+                    width="30" 
+                    height="30" 
+                    class="d-inline-block align-center" 
+                    alt=""
+                    >
+                      Instagram
+                  </a>
+                </li>
+                
+              </ul>
+            </li>
+
+          </div>
+        </nav>
+      </div>
+
+      <div class='container'>
+        
+<div id="Side Note"><h2 id="Side Note" class="header"><a href="#Side Note">Side Note</a></h2></div>
+<p>
+First and foremost, artikel ini ditujukan untuk pengguna Linux &amp; MacOS. Karena untuk
+pengguna Windows, kemungkinan besar kalian pasti menggunakan <code>gitbash</code> / <code>mingw</code> untuk 
+'Linux-like' experience, dan sepengetahuan penulis, install node package secara global 
+tidak membutuhkan akses <code>root</code>. (<span id="Side Note-Jika ada yang bisa konfirmasi, silahkan ke repository"></span><strong id="Jika ada yang bisa konfirmasi, silahkan ke repository">Jika ada yang bisa konfirmasi, silahkan ke repository</strong>
+<a href="https://github.com/yeyee2901/my-wiki">source dari wiki ini</a>, <span id="Side Note-lalu ajukan issue / buat PR"></span><strong id="lalu ajukan issue / buat PR">lalu ajukan issue / buat PR</strong>)
+</p>
+
+<p>
+<br><br>
+</p>
+<div id="Brief"><h2 id="Brief" class="header"><a href="#Brief">Brief</a></h2></div>
+<div id="Brief-Pernah kah?"><h3 id="Pernah kah?" class="header"><a href="#Brief-Pernah kah?">Pernah kah?</a></h3></div>
+<p>
+Suatu saat, kalian pasti pernah menemui artikel, yang didalamnya 'mengajak' / 
+'menganjurkan' untuk install <code>node package</code> tertentu secara global. Alasannya, adalah
+agar tidak repot-repot untuk setting <code>$PATH</code> agar binary-nya dapat dikenali secara
+global. Pasti pernah melihat suatu <em>code snippet</em> seperti berikut:
+</p>
+
+<pre bash>
+npm i -g &lt;node_packages_2&gt; &lt;node_package_2&gt;
+</pre>
+
+<p>
+Dan ketika kalian coba run di terminal, <em>surprise</em> tidak bisaaa. Untuk pengguna UNIX-like
+system, asumsi kalian pasti: "Ah ini kayaknya butuh <code>root</code> access ini supaya bisa install
+secara global". Dan tanpa pikir panjang, pasti langsung menjalankan:
+</p>
+
+<pre bash>
+sudo npm i -g &lt;node_packages_2&gt; &lt;node_package_2&gt;
+</pre>
+
+<p>
+STOP. NO. DON'T. Mari kita kembali ke jalan yang lebih sehat. Pertama kita coba ulik dahulu, mengapa
+hal tersebut berpotensi sangat berbahaya.
+</p>
+
+<p>
+<br>
+</p>
+<div id="Brief-A bit about Node.js"><h3 id="A bit about Node.js" class="header"><a href="#Brief-A bit about Node.js">A bit about Node.js</a></h3></div>
+<p>
+Seperti yang kita tahu, <code>node.js</code> adalah sebuah <code>runtime environment</code> dari Javascript, yang dibuat berdasarkan
+<span id="Brief-A bit about Node.js-V8 Engine"></span><strong id="V8 Engine">V8 Engine</strong> (browser engine dari Google Chrome &amp; Chromium). Pada awalnya, Javascript sendiri merupakan
+bahasa pemrograman yang di desain untuk browser, sehingga program-program Javascript hanya dapat dijalankan
+di browser saja.
+</p>
+
+<p>
+Nah, pada tahun 2009, <span id="Brief-A bit about Node.js-Ryan Dahl"></span><strong id="Ryan Dahl">Ryan Dahl</strong> berhasil menciptakan sebuah software, yang dibuat agar program Javascript
+tersebut dapat dijalankan tanpa browser. Singkat cerita, beliau berhasil membuat <code>node.js</code> dengan C/C++/Javascript, 
+dimana software tersebut menggunakan <span id="Brief-A bit about Node.js-V8 Engine"></span><strong id="V8 Engine">V8 Engine</strong> agar dapat mengeksekusi program Javascript secara native, tanpa
+memerlukan bantuan browser (kata <code>run</code> pada <code>runtime</code> mengindikasikan bahwa ini bermaksud untuk mengeksekusi / menjalankan).
+Secara sederhana, dia membawa semua fitur V8 Engine tersebut agar program Javascript dapat dieksekusi diluar browser.
+</p>
+
+<p>
+Bisa juga sekarang dikatakan bahwa, dengan <code>node.js</code>, maka Javascript dapat digunakan untuk membangun aplikasi
+desktop / CLI / backend, dll. Bahkan implementasi Javascript sudah sampai tahap dapat digunakan untuk <span id="Brief-A bit about Node.js-Web server"></span><strong id="Web server">Web server</strong> (ExpressJS).
+Yang awalnya teknologi web paling populer adalah LAMP / MAMP / XAMPP stack dengan titik berat sisi backend adalah
+PHP, perlahan mulai bersaing dengan kompetitor baru yang "murni" Javascript, seperti MERN / MEAN / MEVN stack. Tech stack
+MERN / MEAN / MEVN ini menggunakan Javascript juga sebagai backend (ExpressJS), hal ini menjadi mungkin berkat hadirnya
+huruf <span id="Brief-A bit about Node.js-N"></span><strong id="N">N</strong> (<code>node.js</code>) pada MERN / MEAN / MEVN stack.
+</p>
+
+<p>
+<br>
+</p>
+<div id="Brief-Why is it dangerous"><h3 id="Why is it dangerous" class="header"><a href="#Brief-Why is it dangerous">Why is it dangerous</a></h3></div>
+<p>
+Melihat dari kata <code>Javascript RUNtime</code> sendiri, kita sudah dapat melihat, bahwa <code>node.js</code> mampu
+mengeksekusi script Javascript. Termasuk yang ada di bundle-bundle node-package! Pastinya kita
+sering melihat metode build aplikasi saat proses instalasinya. Contoh paling sederhana nih, <code>setup.py</code>.
+Dengan <code>setup.py</code>, package python yang kita install, setelah di download source-nya, maka secara otomatis
+dapat langsung memulai proses build-nya (biasanya ini sering digunakan untuk package-package yang fungsionalitas-nya
+memiliki API call ke C/C++, alasan yang paling umum adalah karena C/C++ jauh lebih cepat eksekusinya dibandingkan
+Python). Nah, dari <code>setup.py</code> ini, kita bisa membuat build script untuk automasi, sehingga source package-nya selesai
+di download, script tersebut dapat langsung dijalankan untuk melakukan build bagian tertentu dari package-nya (misalnya
+bagian source C/C++ nya).
+</p>
+
+<p>
+Nah, itu kalau build script-nya <span id="Brief-Why is it dangerous-SEHAT"></span><strong id="SEHAT">SEHAT</strong>. Kita bisa saja dengan mudah mengasumsikan, "Oh ini package-nya banyak vote-nya, 
+berarti aman dong". Namun, internet tidak se-friendly itu reader! Jangan mudah percaya terhadap apa yang anda terima
+dari internet, terutama apabila itu berasal dari pihak yang tidak dikenal.
+</p>
+
+<p>
+Sekarang coba umpamakan sebuah kasus. Kita diberi sebuah file bash <code>build.sh</code>, tapi kita tidak bisa memastikan konten
+file ini akan menjalankan perintah apa saja. Mungkin kita 50-50% percaya saja, ini namanya mengandung unsur <code>build</code>,
+berarti ini untuk melakukan proses compile / build sesuatu. Namun, kalau penulis mengalami pengalaman tersebut, yang
+pertama penulis lakukan adalah cek dulu, ini isinya apa? Kalau tidak bisa di cek konten-nya, wah privasi penulis
+di <em>compromise</em> dong. Apalagi penulis sering menjumpai snippet <code>bash</code> yang kurang lebih seperti ini:
+</p>
+
+<pre bash>
+curl -sL &lt;url&gt; | bash
+</pre>
+
+<p>
+Sudah follow redirect (<code>-L</code> flag), dibuat silent pula (<code>-s</code>). Sudah begitu, response dari <code>&lt;url&gt;</code>-nya langsung di pipe
+ke bash untuk langsung di eksekusi. Yaaa, kalau misal dari pihak ternama seperti <a href="https://rust-lang.org">https://rust-lang.org</a> sih
+kita percaya saja. Kalau ini kan memang diperuntukkan install <code>toolchain</code> untuk Rust, kalau memang script-nya
+melakukan yang tidak-tidak saat dijalankan, pasti sudah ada sekian ratus ribu developer Rust yang protes🤣.
+</p>
+<pre bash>
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</pre>
+<p>
+Namun, tetap saja, jika kita dihadapkan ke situasi diminta untuk menginstall suatu script file dari internet,
+alangkah baiknya <span id="Brief-Why is it dangerous-jangan langsung di pipe ke program eksekutor (bash) untuk eksekusi"></span><strong id="jangan langsung di pipe ke program eksekutor (bash) untuk eksekusi">jangan langsung di pipe ke program eksekutor (bash) untuk eksekusi</strong>. Misalnya, <em>workaround</em>
+yang biasa saya lakukan adalah dengan mengarahkan script tersebut agar di buka di text editor terlebih dahulu.
+</p>
+<pre bash>
+# nano, vi, vim, nvim
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | &lt;your_favorite_text_editor&gt;
+</pre>
+<p>
+Dari penjelasan tersebut, semoga dapat dipahami seberapa berbahaya menjalankan suatu script dari internet
+yang tidak bisa kita pastikan isinya. Ketika anda menemukan script dengan <span id="Brief-Why is it dangerous-sudo curl"></span><strong id="sudo curl">sudo curl</strong> / <span id="Brief-Why is it dangerous-sudo &lt;install_something&gt;"></span><strong id="sudo &lt;install_something&gt;">sudo &lt;install_something&gt;</strong>, 
+PASTIKAN SUMBER-NYA BENAR-BENAR TERPERCAYA.
+</p>
+
+<p>
+Jadi pada intinya, karena sekarang Javascript bisa berjalan native di machine kita (berkat <code>node.js</code>), kita
+juga harus berhati-hati ketika kita menginstall, perlu kita ingat juga akan ada script JS tambahan yang akan
+dijalankan misalnya untuk build package-nya, dan jika tidak bisa kita pastikan build script-nya ini "<span id="Brief-Why is it dangerous-SEHAT"></span><strong id="SEHAT">SEHAT</strong>" atau tidak, 
+<span id="Brief-Why is it dangerous-jangan sekali-kali"></span><strong id="jangan sekali-kali">jangan sekali-kali</strong> <code>sudo npm install -g</code>.
+</p>
+
+<p>
+<span id="Brief-Why is it dangerous-Tambahan"></span><strong id="Tambahan">Tambahan</strong>: seperti kita ketahui, ketika <code>npm install</code> akan melakukan install package-package -nya di direktori
+<code>node_modules</code>. Nah jika, <code>sudo npm install</code>, akan menginstall di <code>node_modules</code> juga, TETAPI, yang bisa mengakses
+hanya <code>root</code> user (karena yang direktori dibuat dengan <code>sudo</code>), sehingga akses <code>node_modules</code> hanya dapat dilakukan
+dengan <code>root</code> user!
+</p>
+
+<p>
+<br><br>
+</p>
+<div id="Workaround NPM Install Global tanpa Sudo"><h2 id="Workaround NPM Install Global tanpa Sudo" class="header"><a href="#Workaround NPM Install Global tanpa Sudo">Workaround NPM Install Global tanpa Sudo</a></h2></div>
+<ol>
+<li>
+Buat direktori untuk menyimpan config <code>npm</code>. Nama direktorinya bebas, 
+    asalkan anda sesuaikan dengan <em>config</em> selanjutnya.
+<pre bash>
+mkdir ~/.npm-packages
+</pre>
+
+<li>
+Buat sebuah dotfile 'rc' (seperti untuk <code>.bashrc</code>), namanya, well.. <code>.npmrc</code>
+<pre bash>
+touch ~/.npmrc
+</pre>
+
+<li>
+Isi file <code>.npmrc</code> tersebut dengan
+<pre bash>
+prefix=${HOME}/.npm-packages
+</pre>
+
+<li>
+Nah, setelah itu tambahkan <code>\(PATH</code> berikut di file <code>.bashrc</code> / <code>.zshrc</code> (tergantung <code>\)SHELL</code>)
+    yang kita gunakan, supaya kita sebagai <code>$USER</code> dapat mengakses package-nya dari mana saja.
+<pre bash>
+export PATH=$NPM_PACKAGES/bin:$PATH
+</pre>
+
+<li>
+Selanjutnya, author juga menyarankan untuk menambahkan ENV variable berikut,
+    agar <code>$PATH</code> nya lebih <em>robust</em> (karena sebelumnya author mengalami issue jika tidak 
+    ada ENV variable berikut)
+<pre bash>
+export NPM_PACKAGES=$HOME/.npm-packages
+export NODE_PATH=$NPM_PACKAGES/lib/node_modules:$NODE_PATH
+</pre>
+
+<li>
+Nah, sekarang anda bisa mencobanya. Misalnya saya ingin menginstall <code>typescript-language-server</code>
+<pre bash>
+npm i -g install typescript typescript-language-server
+</pre>
+
+</ol>
+<p>
+Seharusnya, isi direktori <code>~/.npm-packages/</code> nya kurang lebih:
+</p>
+<pre>
+~/.npm-packages
+  |
+  |- bin/
+  |   |
+  |   |- typescript
+  |   |- typescript-language-server
+  |
+  |- lib/
+  |   |
+  |   |- ....
+  |   |- ....
+</pre>
+
+<p>
+Nahh, berarti sudah sukses! Semoga dengan membaca artikel ini, semoga kita semakin berhati-hati
+dalam menjalankan <code>script</code> tidak dikenal dari internet, apalagi bila isi dari <code>script</code> tersebut
+tidak dapat kita pastikan!
+</p>
+
+<p>
+<br><br>
+</p>
+<div id="DO NOT SUDO THIS, SUDO THAT, SUDO EVERYTHING WITHOUT KNOWING WHAT IT MIGHT DO TO YOUR SYSTEM"><h1 id="DO NOT SUDO THIS, SUDO THAT, SUDO EVERYTHING WITHOUT KNOWING WHAT IT MIGHT DO TO YOUR SYSTEM" class="header"><a href="#DO NOT SUDO THIS, SUDO THAT, SUDO EVERYTHING WITHOUT KNOWING WHAT IT MIGHT DO TO YOUR SYSTEM">DO NOT SUDO THIS, SUDO THAT, SUDO EVERYTHING WITHOUT KNOWING WHAT IT MIGHT DO TO YOUR SYSTEM</a></h1></div>
+
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+      <!-- include highlight.js -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+      <script type="text/javascript">
+          document.querySelectorAll('pre').forEach(block => hljs.highlightBlock(block));
+      </script>
+    </body>
+</html>

@@ -29,3 +29,12 @@ dan STMicroelectronics `STM32`.
 ==== [[KNOWLEDGE/Other/dotfiles|How to create .dotfiles]] ====
 Menjelaskan bagaimana membuat repository `dotfiles` untuk
 manajemen file config. [[KNOWLEDGE/Other/dotfiles|Read article...]]
+
+<br>
+
+==== [[KNOWLEDGE/Other/npm-install|Do not sudo npm install!]] ====
+Mengapa demikian? singkat cerita, `npm install` kemungkinan akan menjalankan
+beberapa script JS tambahan dari package target saat instalasi (dan ingat, `node`
+membuat JS dapat di execute native di system)
+_Can you imagine not knowing what these scripts might do to our system, and we just give them root access?_
+[[KNOWLEDGE/Other/npm-install|Read article...]]

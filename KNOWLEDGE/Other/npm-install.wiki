@@ -1,0 +1,156 @@
+== Side Note ==
+First and foremost, artikel ini ditujukan untuk pengguna Linux & MacOS. Karena untuk
+pengguna Windows, kemungkinan besar kalian pasti menggunakan `gitbash` / `mingw` untuk 
+'Linux-like' experience, dan sepengetahuan penulis, install node package secara global 
+tidak membutuhkan akses `root`. (*Jika ada yang bisa konfirmasi, silahkan ke repository*
+[[https://github.com/yeyee2901/my-wiki|source dari wiki ini]], *lalu ajukan issue / buat PR*)
+
+<br><br>
+== Brief ==
+=== Pernah kah? ===
+Suatu saat, kalian pasti pernah menemui artikel, yang didalamnya 'mengajak' / 
+'menganjurkan' untuk install `node package` tertentu secara global. Alasannya, adalah
+agar tidak repot-repot untuk setting `$PATH` agar binary-nya dapat dikenali secara
+global. Pasti pernah melihat suatu _code snippet_ seperti berikut:
+
+{{{bash
+npm i -g <node_packages_2> <node_package_2>
+}}}
+
+Dan ketika kalian coba run di terminal, _surprise_ tidak bisaaa. Untuk pengguna UNIX-like
+system, asumsi kalian pasti: "Ah ini kayaknya butuh `root` access ini supaya bisa install
+secara global". Dan tanpa pikir panjang, pasti langsung menjalankan:
+
+{{{bash
+sudo npm i -g <node_packages_2> <node_package_2>
+}}}
+
+STOP. NO. DON'T. Mari kita kembali ke jalan yang lebih sehat. Pertama kita coba ulik dahulu, mengapa
+hal tersebut berpotensi sangat berbahaya.
+
+<br>
+=== A bit about Node.js ===
+Seperti yang kita tahu, `node.js` adalah sebuah `runtime environment` dari Javascript, yang dibuat berdasarkan
+*V8 Engine* (browser engine dari Google Chrome & Chromium). Pada awalnya, Javascript sendiri merupakan
+bahasa pemrograman yang di desain untuk browser, sehingga program-program Javascript hanya dapat dijalankan
+di browser saja.
+
+Nah, pada tahun 2009, *Ryan Dahl* berhasil menciptakan sebuah software, yang dibuat agar program Javascript
+tersebut dapat dijalankan tanpa browser. Singkat cerita, beliau berhasil membuat `node.js` dengan C/C++/Javascript, 
+dimana software tersebut menggunakan *V8 Engine* agar dapat mengeksekusi program Javascript secara native, tanpa
+memerlukan bantuan browser (kata `run` pada `runtime` mengindikasikan bahwa ini bermaksud untuk mengeksekusi / menjalankan).
+Secara sederhana, dia membawa semua fitur V8 Engine tersebut agar program Javascript dapat dieksekusi diluar browser.
+
+Bisa juga sekarang dikatakan bahwa, dengan `node.js`, maka Javascript dapat digunakan untuk membangun aplikasi
+desktop / CLI / backend, dll. Bahkan implementasi Javascript sudah sampai tahap dapat digunakan untuk *Web server* (ExpressJS).
+Yang awalnya teknologi web paling populer adalah LAMP / MAMP / XAMPP stack dengan titik berat sisi backend adalah
+PHP, perlahan mulai bersaing dengan kompetitor baru yang "murni" Javascript, seperti MERN / MEAN / MEVN stack. Tech stack
+MERN / MEAN / MEVN ini menggunakan Javascript juga sebagai backend (ExpressJS), hal ini menjadi mungkin berkat hadirnya
+huruf *N* (`node.js`) pada MERN / MEAN / MEVN stack.
+
+<br>
+=== Why is it dangerous ===
+Melihat dari kata `Javascript RUNtime` sendiri, kita sudah dapat melihat, bahwa `node.js` mampu
+mengeksekusi script Javascript. Termasuk yang ada di bundle-bundle node-package! Pastinya kita
+sering melihat metode build aplikasi saat proses instalasinya. Contoh paling sederhana nih, `setup.py`.
+Dengan `setup.py`, package python yang kita install, setelah di download source-nya, maka secara otomatis
+dapat langsung memulai proses build-nya (biasanya ini sering digunakan untuk package-package yang fungsionalitas-nya
+memiliki API call ke C/C++, alasan yang paling umum adalah karena C/C++ jauh lebih cepat eksekusinya dibandingkan
+Python). Nah, dari `setup.py` ini, kita bisa membuat build script untuk automasi, sehingga source package-nya selesai
+di download, script tersebut dapat langsung dijalankan untuk melakukan build bagian tertentu dari package-nya (misalnya
+bagian source C/C++ nya).
+
+Nah, itu kalau build script-nya *SEHAT*. Kita bisa saja dengan mudah mengasumsikan, "Oh ini package-nya banyak vote-nya, 
+berarti aman dong". Namun, internet tidak se-friendly itu reader! Jangan mudah percaya terhadap apa yang anda terima
+dari internet, terutama apabila itu berasal dari pihak yang tidak dikenal.
+
+Sekarang coba umpamakan sebuah kasus. Kita diberi sebuah file bash `build.sh`, tapi kita tidak bisa memastikan konten
+file ini akan menjalankan perintah apa saja. Mungkin kita 50-50% percaya saja, ini namanya mengandung unsur `build`,
+berarti ini untuk melakukan proses compile / build sesuatu. Namun, kalau penulis mengalami pengalaman tersebut, yang
+pertama penulis lakukan adalah cek dulu, ini isinya apa? Kalau tidak bisa di cek konten-nya, wah privasi penulis
+di _compromise_ dong. Apalagi penulis sering menjumpai snippet `bash` yang kurang lebih seperti ini:
+
+{{{bash
+curl -sL <url> | bash
+}}}
+
+Sudah follow redirect (`-L` flag), dibuat silent pula (`-s`). Sudah begitu, response dari `<url>`-nya langsung di pipe
+ke bash untuk langsung di eksekusi. Yaaa, kalau misal dari pihak ternama seperti [[https://rust-lang.org]] sih
+kita percaya saja. Kalau ini kan memang diperuntukkan install `toolchain` untuk Rust, kalau memang script-nya
+melakukan yang tidak-tidak saat dijalankan, pasti sudah ada sekian ratus ribu developer Rust yang protes🤣.
+{{{bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+}}}
+Namun, tetap saja, jika kita dihadapkan ke situasi diminta untuk menginstall suatu script file dari internet,
+alangkah baiknya *jangan langsung di pipe ke program eksekutor (bash) untuk eksekusi*. Misalnya, _workaround_
+yang biasa saya lakukan adalah dengan mengarahkan script tersebut agar di buka di text editor terlebih dahulu.
+{{{bash
+# nano, vi, vim, nvim
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | <your_favorite_text_editor>
+}}}
+Dari penjelasan tersebut, semoga dapat dipahami seberapa berbahaya menjalankan suatu script dari internet
+yang tidak bisa kita pastikan isinya. Ketika anda menemukan script dengan *sudo curl* / *sudo <install_something>*, 
+PASTIKAN SUMBER-NYA BENAR-BENAR TERPERCAYA.
+
+Jadi pada intinya, karena sekarang Javascript bisa berjalan native di machine kita (berkat `node.js`), kita
+juga harus berhati-hati ketika kita menginstall, perlu kita ingat juga akan ada script JS tambahan yang akan
+dijalankan misalnya untuk build package-nya, dan jika tidak bisa kita pastikan build script-nya ini "*SEHAT*" atau tidak, 
+*jangan sekali-kali* `sudo npm install -g`.
+
+*Tambahan*: seperti kita ketahui, ketika `npm install` akan melakukan install package-package -nya di direktori
+`node_modules`. Nah jika, `sudo npm install`, akan menginstall di `node_modules` juga, TETAPI, yang bisa mengakses
+hanya `root` user (karena yang direktori dibuat dengan `sudo`), sehingga akses `node_modules` hanya dapat dilakukan
+dengan `root` user!
+
+<br><br>
+== Workaround NPM Install Global tanpa Sudo ==
+1. Buat direktori untuk menyimpan config `npm`. Nama direktorinya bebas, 
+    asalkan anda sesuaikan dengan _config_ selanjutnya.
+{{{bash
+mkdir ~/.npm-packages
+}}}
+2. Buat sebuah dotfile 'rc' (seperti untuk `.bashrc`), namanya, well.. `.npmrc`
+{{{bash
+touch ~/.npmrc
+}}}
+3. Isi file `.npmrc` tersebut dengan
+{{{bash
+prefix=${HOME}/.npm-packages
+}}}
+4. Nah, setelah itu tambahkan `$PATH` berikut di file `.bashrc` / `.zshrc` (tergantung `$SHELL`)
+    yang kita gunakan, supaya kita sebagai `$USER` dapat mengakses package-nya dari mana saja.
+{{{bash
+export PATH=$NPM_PACKAGES/bin:$PATH
+}}}
+5. Selanjutnya, author juga menyarankan untuk menambahkan ENV variable berikut,
+    agar `$PATH` nya lebih _robust_ (karena sebelumnya author mengalami issue jika tidak 
+    ada ENV variable berikut)
+{{{bash
+export NPM_PACKAGES=$HOME/.npm-packages
+export NODE_PATH=$NPM_PACKAGES/lib/node_modules:$NODE_PATH
+}}}
+6. Nah, sekarang anda bisa mencobanya. Misalnya saya ingin menginstall `typescript-language-server`
+{{{bash
+npm i -g install typescript typescript-language-server
+}}}
+Seharusnya, isi direktori `~/.npm-packages/` nya kurang lebih:
+{{{
+~/.npm-packages
+  |
+  |- bin/
+  |   |
+  |   |- typescript
+  |   |- typescript-language-server
+  |
+  |- lib/
+  |   |
+  |   |- ....
+  |   |- ....
+}}}
+
+Nahh, berarti sudah sukses! Semoga dengan membaca artikel ini, semoga kita semakin berhati-hati
+dalam menjalankan `script` tidak dikenal dari internet, apalagi bila isi dari `script` tersebut
+tidak dapat kita pastikan!
+
+<br><br>
+= DO NOT SUDO THIS, SUDO THAT, SUDO EVERYTHING WITHOUT KNOWING WHAT IT MIGHT DO TO YOUR SYSTEM =

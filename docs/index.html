@@ -118,6 +118,19 @@ Menjelaskan bagaimana membuat repository <code>dotfiles</code> untuk
 manajemen file config. <a href="KNOWLEDGE/Other/dotfiles.html">Read article...</a>
 </p>
 
+<p>
+<br>
+</p>
+
+<div id="Other-[[KNOWLEDGE/Other/npm-install|Do not sudo npm install!]]"><h4 id="[[KNOWLEDGE/Other/npm-install|Do not sudo npm install!]]" class="header"><a href="#Other-[[KNOWLEDGE/Other/npm-install|Do not sudo npm install!]]"><a href="KNOWLEDGE/Other/npm-install.html">Do not sudo npm install!</a></a></h4></div>
+<p>
+Mengapa demikian? singkat cerita, <code>npm install</code> kemungkinan akan menjalankan
+beberapa script JS tambahan dari package target saat instalasi (dan ingat, <code>node</code>
+membuat JS dapat di execute native di system)
+<em>Can you imagine not knowing what these scripts might do to our system, and we just give them root access?</em>
+<a href="KNOWLEDGE/Other/npm-install.html">Read article...</a>
+</p>
+
       </div>
 
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

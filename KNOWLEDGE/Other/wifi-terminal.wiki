@@ -1,4 +1,4 @@
-%title Wifi & Terminal
+%title Wifi - Terminal
 
 Teruntuk anda semua, yang rumahnya adalah terminal, dan tidak ingin memasang DE / WM,
 dikarenakan misalnya, machine tersebut digunakan sebagai server saja.

@@ -38,3 +38,11 @@ beberapa script JS tambahan dari package target saat instalasi (dan ingat, `node
 membuat JS dapat di execute native di system)
 _Can you imagine not knowing what these scripts might do to our system, and we just give them root access?_
 [[KNOWLEDGE/Other/npm-install|Read article...]]
+
+<br>
+
+==== [[KNOWLEDGE/Other/wifi-terminal|How to Turn On WiFi / Network from Terminal]] ====
+In case kita bekerja di lingkungan yang tidak memiliki desktop environment / GUI.
+Cara ini sudah di test dapat berjalan pada Ubuntu 19.04 & Pop-OS 20.04. CLI application
+yang digunakan adalah `nmcli`.
+[[KNOWLEDGE/Other/wifi-terminal|Read article...]] 

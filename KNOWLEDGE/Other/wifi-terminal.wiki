@@ -1,0 +1,65 @@
+%title Wifi & Terminal
+
+Teruntuk anda semua, yang rumahnya adalah terminal, dan tidak ingin memasang DE / WM,
+dikarenakan misalnya, machine tersebut digunakan sebagai server saja.
+
+I present a quick guide on simple network connection settings via terminal.
+
+<br>
+
+==== Getting nmcli ====
+{{{bash
+sudo apt install network-manager
+}}}
+
+Jika ingin, juga bisa update terlebih dahulu untuk memastikan dependency aman & sesuai versi.
+{{{bash
+sudo apt update && sudo apt upgrade
+}}}
+
+<br>
+
+
+==== Making Sure Network-Manager is ON ====
+Mengaktifkan NetworkManager service:
+{{{bash
+sudo systemctl start NetworkManager.service 
+}}}
+
+Memastikan NetworkManager melakukan _boot_ bersama dengan sistem:
+{{{bash
+sudo systemctl enable NetworkManager.service
+}}}
+
+==== Airplane Mode ====
+
+{{{bash
+# Airplane mode
+nmcli r all off
+
+# Turn on network
+nmcli r all on
+}}}
+
+<br>
+
+==== Connect to Wifi ====
+`nmcli` juga punya alternatif untuk koneksi yang lebih interaktif menggunakan `nmtui`.
+Software `nmtui` tersebut menggunakan `ncurses` untuk membuat tampilan sederhana yang
+interaktif di terminal.
+{{{bash
+nmtui # launch nmtui
+}}}
+
+Atau jika lebih suka menggunakan terminal command biasa:
+{{{bash
+nmcli -a d wifi connect <SSID>
+}}}
+Flag `-a` adalah untuk _ask password_ , anda akan diminta untuk memasukkan password. Jangan
+khawatir, setelah terhubung untuk pertama kali, maka koneksi akan otomatis di save ke
+direktori `/etc/NetworkManager/system-connections`
+
+
+
+
+===== SEKIAN =====
